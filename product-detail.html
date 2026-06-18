@@ -1,11 +1,884 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>清水斷崖獨木舟探險 — 島嶼旅跡 IslandTrace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ===== RESET & 基本設定（與探索體驗頁相同，保持風格一致） ===== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --orange: #E8633A;
+            --orange-light: #F07A54;
+            --dark: #1A1A2E;
+            --navy: #16213E;
+            --cream: #F5F0EB;
+            --warm-white: #FAF8F5;
+            --text-main: #2C2C2C;
+            --text-muted: #888;
+            --border: #E0DAD3;
+            --star: #E8633A;
+            --green: #2E7D4F;
+            --red: #C0392B;
+            --serif: 'Noto Serif TC', serif;
+            --sans: 'Noto Sans TC', sans-serif;
+        }
+
+        body {
+            font-family: var(--sans);
+            color: var(--text-main);
+            background: #fff;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===================== NAV（與首頁/探索頁相同） ===================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            height: 60px;
+            background: rgba(20, 20, 35, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .nav-logo {
+            font-family: var(--serif);
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.04em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a.active {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .nav-cta {
+            background: var(--orange);
+            color: #fff !important;
+            padding: 7px 18px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--orange-light) !important;
+        }
+
+        /* ===================== 麵包屑 ===================== */
+        .breadcrumb {
+            margin-top: 60px;
+            padding: 14px 48px;
+            background: var(--warm-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--orange);
+        }
+
+        .breadcrumb .sep {
+            color: var(--border);
+        }
+
+        .breadcrumb .current {
+            color: var(--text-main);
+        }
+
+        /* ===================== 主內容：左側產品介紹 + 右側訂購卡 ===================== */
+        .detail-wrapper {
+            display: flex;
+            gap: 48px;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 48px 80px;
+            align-items: flex-start;
+        }
+
+        .detail-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* ===== 圖片畫廊 ===== */
+        .gallery-main {
+            width: 100%;
+            height: 440px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #ddd;
+            margin-bottom: 14px;
+        }
+
+        .gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-thumbs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .thumb {
+            width: 100px;
+            height: 76px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            opacity: 0.75;
+            transition: all 0.18s;
+            background: #ddd;
+        }
+
+        .thumb:hover {
+            opacity: 1;
+        }
+
+        .thumb.active {
+            border-color: var(--orange);
+            opacity: 1;
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== 標題與meta資訊 ===== */
+        .product-title {
+            font-family: var(--serif);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .product-meta .stars {
+            color: var(--star);
+        }
+
+        .product-meta strong {
+            color: var(--text-main);
+        }
+
+        /* ===== 區塊共用樣式 ===== */
+        .detail-section {
+            margin-bottom: 36px;
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-desc {
+            font-size: 13.5px;
+            color: var(--text-main);
+            line-height: 1.9;
+        }
+
+        /* ===== 行程亮點 ===== */
+        .highlight-list {
+            list-style: none;
+        }
+
+        .highlight-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            font-size: 13.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .highlight-list li:last-child {
+            border-bottom: none;
+        }
+
+        .highlight-list .hl-icon {
+            color: var(--orange);
+            flex-shrink: 0;
+        }
+
+        /* ===== 費用說明 ===== */
+        .fee-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .fee-box {
+            background: var(--cream);
+            border-radius: 12px;
+            padding: 20px 22px;
+        }
+
+        .fee-box h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fee-box.included h4 {
+            color: var(--green);
+        }
+
+        .fee-box.excluded h4 {
+            color: var(--red);
+        }
+
+        .fee-box ul {
+            list-style: none;
+        }
+
+        .fee-box li {
+            font-size: 12.5px;
+            color: var(--text-main);
+            margin-bottom: 9px;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .fee-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        .fee-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== 旅客評論 ===== */
+        .review {
+            display: flex;
+            gap: 14px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .review:last-child {
+            border-bottom: none;
+        }
+
+        .review-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .review-body {
+            flex: 1;
+        }
+
+        .review-name {
+            font-weight: 600;
+            font-size: 13.5px;
+        }
+
+        .review-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: 8px;
+        }
+
+        .review-stars {
+            color: var(--star);
+            font-size: 12px;
+            margin: 5px 0 8px;
+        }
+
+        .review-text {
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.8;
+        }
+
+        /* ===================== 右側訂購卡（sticky） ===================== */
+        .booking-card {
+            width: 340px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 84px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .price-now {
+            font-family: var(--serif);
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .price-unit {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            margin: 10px 0 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .rating-row .stars {
+            color: var(--star);
+        }
+
+        .rating-row strong {
+            color: var(--text-main);
+        }
+
+        .qty-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            font-family: var(--sans);
+            color: var(--text-main);
+        }
+
+        .qty-btn:hover:not(:disabled) {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        .qty-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .qty-num {
+            font-size: 15px;
+            font-weight: 600;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .total-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .total-amount {
+            font-family: var(--serif);
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: var(--sans);
+        }
+
+        .book-btn:hover {
+            background: var(--orange-light);
+        }
+
+        .booking-note {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 14px;
+        }
+
+        /* ===================== FOOTER（與首頁/探索頁相同） ===================== */
+        footer {
+            background: var(--navy);
+            color: rgba(255, 255, 255, 0.78);
+            padding: 64px 48px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr 1fr;
+            gap: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-brand .logo {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 12px;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .footer-col h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.55);
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* ===== 響應式：手機螢幕時，訂購卡移到內容下方並取消 sticky ===== */
+        @media (max-width: 860px) {
+            .detail-wrapper {
+                flex-direction: column;
+            }
+
+            .booking-card {
+                width: 100%;
+                position: static;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
+
+    <!-- ====== NAV（從探索體驗頁複製過來，保持每頁一致） ====== -->
+    <nav>
+        <a href="index.html" class="nav-logo">島嶼旅跡 ·</a>
+        <ul class="nav-links">
+            <li><a href="#">探索體驗</a></li>
+            <li><a href="#">關於我們</a></li>
+            <li><a href="#">常見問題</a></li>
+            <li><a href="#">我的訂單</a></li>
+            <li><a href="#" class="nav-cta">登入 / 註冊</a></li>
+        </ul>
+    </nav>
+
+    <!-- ====== 麵包屑 ====== -->
+    <div class="breadcrumb">
+        <a href="index.html">首頁</a>
+        <span class="sep">›</span>
+        <a href="#">探索體驗</a>
+        <span class="sep">›</span>
+        <span class="current">清水斷崖獨木舟探險</span>
+    </div>
+
+    <!-- ====== 主內容：左側商品介紹 + 右側訂購卡 ====== -->
+    <div class="detail-wrapper">
+
+        <!-- ===== 左側：商品介紹 ===== -->
+        <main class="detail-main">
+
+            <!-- 圖片畫廊 -->
+            <div class="gallery-main">
+                <img id="main-image" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+                    alt="清水斷崖獨木舟探險" />
+            </div>
+            <div class="gallery-thumbs">
+                <div class="thumb active"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=75" alt="縮圖1" />
+                </div>
+                <div class="thumb"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=200&q=75" alt="縮圖2" />
+                </div>
+                <div class="thumb"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=200&q=75" alt="縮圖3" />
+                </div>
+                <div class="thumb"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=200&q=75" alt="縮圖4" />
+                </div>
+            </div>
+
+            <!-- 標題與基本資訊 -->
+            <h1 class="product-title">清水斷崖獨木舟探險</h1>
+            <div class="product-meta">
+                <span>📍 花蓮</span>
+                <span>⏱ 半天</span>
+                <span>🏷 戶外冒險</span>
+                <span class="stars">★★★★</span>
+                <span><strong>4.9</strong>（312 則評論）</span>
+            </div>
+
+            <!-- 體驗介紹 -->
+            <section class="detail-section">
+                <h2 class="section-title">體驗介紹</h2>
+                <p class="section-desc">
+                    這是一場深入花蓮在地生活的難忘體驗。由當地資深嚮導親自帶領，您將突破一般觀光行程的框架，真正感受這片土地的靈魂與韻味。無論您是第一次探索台灣，或是熟悉這座島嶼的旅人，這場體驗都將讓您看見截然不同的風景。
+                </p>
+            </section>
+
+            <!-- 行程亮點 -->
+            <section class="detail-section">
+                <h2 class="section-title">✦ 行程亮點</h2>
+                <ul class="highlight-list">
+                    <li><span class="hl-icon">✦</span>深入探索花蓮最具代表性的自然與人文景觀</li>
+                    <li><span class="hl-icon">✦</span>由在地認證嚮導全程帶領，分享第一手在地故事</li>
+                    <li><span class="hl-icon">✦</span>小班制體驗（最多 8 人），確保每位旅客都獲得充分關注</li>
+                    <li><span class="hl-icon">✦</span>適合各年齡層，無需特殊技能或體力即可參與</li>
+                    <li><span class="hl-icon">✦</span>體驗結束後提供精美電子紀念照片供旅客珍藏</li>
+                </ul>
+            </section>
+
+            <!-- 費用說明 -->
+            <section class="detail-section">
+                <h2 class="section-title">費用說明</h2>
+                <div class="fee-grid">
+                    <div class="fee-box included">
+                        <h4>✅ 費用包含</h4>
+                        <ul>
+                            <li>專業嚮導帶領全程</li>
+                            <li>相關活動器材與裝備</li>
+                            <li>旅遊責任保險</li>
+                            <li>體驗結束後的紀念照片</li>
+                        </ul>
+                    </div>
+                    <div class="fee-box excluded">
+                        <h4>❌ 費用不包含</h4>
+                        <ul>
+                            <li>交通費用（往返集合點）</li>
+                            <li>個人餐飲費用</li>
+                            <li>個人旅遊保險</li>
+                            <li>額外自費項目</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 旅客評論 -->
+            <section class="detail-section">
+                <h2 class="section-title">旅客評論</h2>
+
+                <div class="review">
+                    <img class="review-avatar"
+                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=75" alt="林小美" />
+                    <div class="review-body">
+                        <span class="review-name">林小美</span><span class="review-date">2025.04</span>
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">非常棒的體驗！嚮導超級專業又親切，讓我們玩得非常開心。強烈推薦給所有想要深度認識台灣的朋友！</p>
+                    </div>
+                </div>
+
+                <div class="review">
+                    <img class="review-avatar"
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=75" alt="王大明" />
+                    <div class="review-body">
+                        <span class="review-name">王大明</span><span class="review-date">2025.03</span>
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">這是我今年最難忘的體驗之一，感謝嚮導分享了很多在地故事，讓整個旅程充滿意義。下次一定還要再來！</p>
+                    </div>
+                </div>
+
+                <div class="review">
+                    <img class="review-avatar"
+                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=75" alt="Kenji Y." />
+                    <div class="review-body">
+                        <span class="review-name">Kenji Y.</span><span class="review-date">2025.02</span>
+                        <div class="review-stars">★★★★</div>
+                        <p class="review-text">來自日本的我，透過這次體驗更加認識了台灣的美。嚮導的英文解說也很流暢，真的很棒的安排。</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ===== 右側：訂購卡（固定顯示在畫面上，跟著捲動） ===== -->
+        <aside class="booking-card">
+            <div>
+                <span class="price-now" id="unit-price-display">NT$ 1,800</span>
+                <span class="price-unit"> / 人起</span>
+            </div>
+
+            <div class="rating-row">
+                <span class="stars">★★★★</span>
+                <strong>4.9</strong>
+                <span>(312)</span>
+            </div>
+
+            <div class="qty-row">
+                <span>參加人數</span>
+                <div class="qty-control">
+                    <button class="qty-btn" id="btn-minus" onclick="decreaseQty()">−</button>
+                    <span class="qty-num" id="qty-num">1</span>
+                    <button class="qty-btn" id="btn-plus" onclick="increaseQty()">＋</button>
+                </div>
+            </div>
+
+            <div class="total-row">
+                <span>總金額</span>
+                <span class="total-amount" id="total-amount">NT$ 1,800</span>
+            </div>
+
+            <button class="book-btn" onclick="bookNow()">立刻預訂</button>
+
+            <div class="booking-note">🔒 安全付款　·　免費取消（7天前）</div>
+        </aside>
+
+    </div><!-- end detail-wrapper -->
+
+    <!-- ====== FOOTER（從探索體驗頁複製過來，保持每頁一致） ====== -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">島嶼旅跡</div>
+                <p>深入台灣每一個小鎮，<br>感受在地的真實故事。<br>我們相信，旅行不只是到達目的地，<br>而是與那片土地真實相遇。</p>
+            </div>
+            <div class="footer-col">
+                <h4>探索</h4>
+                <ul>
+                    <li><a href="#">所有體驗</a></li>
+                    <li><a href="#">戶外冒險</a></li>
+                    <li><a href="#">手作工藝</a></li>
+                    <li><a href="#">美食料理</a></li>
+                    <li><a href="#">文化歷史</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>公司</h4>
+                <ul>
+                    <li><a href="#">關於我們</a></li>
+                    <li><a href="#">常見問答</a></li>
+                    <li><a href="#">旅遊嚮導招募</a></li>
+                    <li><a href="#">媒體合作</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>支援</h4>
+                <ul>
+                    <li><a href="#">退換政策</a></li>
+                    <li><a href="#">隱私政策</a></li>
+                    <li><a href="#">服務條款</a></li>
+                    <li><a href="#">查看訂單</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+            <a href="#">用心定義台灣每一寸土地</a>
+        </div>
+    </footer>
+
+    <!-- ====== JavaScript：訂購卡互動邏輯 + 圖片畫廊 ====== -->
+    <script>
+        // ── 第一步：把「會變動的資料」存成變數，方便集中管理 ──
+        const unitPrice = 1800;   // 每人的單價（之後若要做成多商品共用，可以改成從資料庫/陣列讀取）
+        const maxQty = 8;         // 對應「行程亮點」裡寫的：小班制最多 8 人
+        const minQty = 1;         // 至少要訂 1 人
+        let currentQty = 1;       // 目前選擇的人數，預設 1 人
+
+        // ── 第二步：寫一個「更新畫面」的函式 ──
+        // 邏輯：只要人數改變，就要重新計算總金額，並更新畫面上的文字
+        function updateDisplay() {
+            // 把目前人數寫到畫面上
+            document.getElementById('qty-num').textContent = currentQty;
+
+            // 計算總金額 = 單價 × 人數
+            const total = unitPrice * currentQty;
+
+            // toLocaleString() 可以自動幫數字加上千分位逗號，例如 1800 -> "1,800"
+            document.getElementById('total-amount').textContent = 'NT$ ' + total.toLocaleString();
+
+            // 當人數已達最小值/最大值時，把對應的按鈕「鎖住」，避免使用者繼續按
+            document.getElementById('btn-minus').disabled = (currentQty <= minQty);
+            document.getElementById('btn-plus').disabled = (currentQty >= maxQty);
+        }
+
+        // ── 第三步：寫「加」、「減」按鈕各自要做的事 ──
+        function increaseQty() {
+            if (currentQty < maxQty) {
+                currentQty++;       // 等同於 currentQty = currentQty + 1
+                updateDisplay();    // 每次數字改變後，都要呼叫一次更新畫面
+            }
+        }
+
+        function decreaseQty() {
+            if (currentQty > minQty) {
+                currentQty--;       // 等同於 currentQty = currentQty - 1
+                updateDisplay();
+            }
+        }
+
+        // ── 第四步：圖片畫廊 - 點縮圖換主圖 ──
+        // thumbEl：被點到的縮圖本身（透過 this 傳進來）
+        // newSrc：要換上去的大圖網址
+        function changeImage(thumbEl, newSrc) {
+            // 換主圖的 src
+            document.getElementById('main-image').src = newSrc;
+
+            // 把所有縮圖的 active 樣式拿掉，再加到「目前被點的這個」上面
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            thumbEl.classList.add('active');
+        }
+
+        // ── 第五步：按下「立刻預訂」要做的事 ──
+        // 這裡先用 alert 模擬送出訂單，之後可以換成串接後端 API 的程式碼
+        function bookNow() {
+            const total = unitPrice * currentQty;
+            alert('已為您預訂 ' + currentQty + ' 位參加者\n總金額：NT$ ' + total.toLocaleString() + '\n（這裡之後可以接上真正的送出訂單流程）');
+        }
+
+        // ── 第六步：頁面載入時，先執行一次，確保畫面跟變數是同步的 ──
+        updateDisplay();
+    </script>
+
 </body>
+
 </html>
