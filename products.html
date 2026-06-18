@@ -591,10 +591,10 @@
             <div class="filter-section">
                 <div class="filter-section-title">主題分類</div>
                 <div class="tag-group" id="theme-tags">
-                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🏔️ 戶外</button>
-                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🎨 手作</button>
-                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🍜 美食</button>
-                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🏛️ 文化</button>
+                    <button class="tag-btn has-icon" data-theme="戶外" onclick="toggleTag(this)">🏔️ 戶外</button>
+                    <button class="tag-btn has-icon" data-theme="手作" onclick="toggleTag(this)">🎨 手作</button>
+                    <button class="tag-btn has-icon" data-theme="美食" onclick="toggleTag(this)">🍜 美食</button>
+                    <button class="tag-btn has-icon" data-theme="文化" onclick="toggleTag(this)">🏛️ 文化</button>
                 </div>
             </div>
 
@@ -1007,7 +1007,7 @@
 
             // 收集目前選中的主題（去掉 emoji）
             const activeThemes = [...document.querySelectorAll('#theme-tags .tag-btn.active')]
-                .map(btn => btn.textContent.trim().slice(2)); // 移除前兩個字元（emoji + 空格）
+                .map(btn => btn.dataset.theme); // 移除前兩個字元（emoji + 空格）
 
             // 讀取價格範圍
             const minPrice = parseInt(document.getElementById('price-min').value) || 0;
