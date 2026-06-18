@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>關於我們 · 島嶼旅跡 IslandTrace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8633A;
+      --orange-light: #F07A54;
+      --dark: #1A1A2E;
+      --navy: #16213E;
+      --cream: #F5F0EB;
+      --warm-white: #FAF8F5;
+      --text-main: #2C2C2C;
+      --text-muted: #888;
+      --border: #E0DAD3;
+      --serif: 'Noto Serif TC', serif;
+      --sans: 'Noto Sans TC', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-main);
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      background: var(--navy);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: #fff; font-weight: 500; }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; }
+
+    /* ===================== ABOUT HERO ===================== */
+    .about-hero {
+      background: var(--navy);
+      padding: 120px 72px 72px;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+    }
+
+    .about-hero-decoration {
+      position: absolute;
+      right: 80px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(60, 40, 60, 0.55);
+      pointer-events: none;
+    }
+
+    .about-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+    }
+
+    .about-hero .section-eyebrow {
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+
+    .about-hero .section-eyebrow::before {
+      background: var(--orange);
+    }
+
+    .about-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 4.5vw, 54px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+
+    .about-hero h1 .accent {
+      color: var(--orange);
+    }
+
+    .about-hero p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.9;
+      max-width: 420px;
+    }
+
+    /* ===================== SHARED SECTION STYLES ===================== */
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1.25;
+      margin-bottom: 36px;
+    }
+
+    /* ===================== BRAND STORY ===================== */
+    .brand-story {
+      padding: 80px 72px;
+      background: #fff;
+    }
+
+    .brand-story-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .brand-story-img {
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+
+    .brand-story-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+
+    .brand-story-img:hover img {
+      transform: scale(1.03);
+    }
+
+    .brand-story-text .section-eyebrow { margin-bottom: 14px; }
+
+    .brand-story-text h2 {
+      font-family: var(--serif);
+      font-size: clamp(24px, 2.6vw, 32px);
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .brand-story-text p {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.9;
+      margin-bottom: 14px;
+    }
+
+    .brand-story-text p:last-of-type { margin-bottom: 28px; }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      padding: 13px 28px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--sans);
+      white-space: nowrap;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary:hover { background: var(--orange-light); }
+
+    /* ===================== CORE VALUES ===================== */
+    .core-values {
+      background: var(--warm-white);
+      padding: 80px 72px;
+    }
+
+    .core-values .section-title { margin-bottom: 40px; }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .value-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 24px;
+      border: 1.5px solid var(--border);
+      transition: box-shadow 0.22s, border-color 0.22s;
+    }
+
+    .value-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      border-color: rgba(232,99,58,0.3);
+    }
+
+    .value-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+      line-height: 1;
+    }
+
+    .value-card h3 {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .value-card p {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.85;
+    }
+
+    /* ===================== TEAM ===================== */
+    .team-section {
+      padding: 80px 72px;
+      background: #fff;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .team-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+    }
+
+    .team-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s;
+      filter: grayscale(20%);
+    }
+
+    .team-card:hover img {
+      transform: scale(1.04);
+      filter: grayscale(0%);
+    }
+
+    .team-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20,20,40,0.75) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .team-card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 16px;
+    }
+
+    .team-card-role {
+      font-size: 10px;
+      color: var(--orange);
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .team-card-name {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* ===================== NUMBERS / STATS ===================== */
+    .numbers-section {
+      background: var(--navy);
+      padding: 72px;
+    }
+
+    .numbers-section .section-eyebrow {
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 48px;
+    }
+
+    .numbers-section .section-eyebrow::before {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+
+    .number-value {
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 60px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .number-value .accent { color: var(--orange); }
+
+    .number-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.04em;
+    }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: var(--navy);
+      padding: 60px 72px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-brand .logo {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.48);
+      line-height: 1.9;
+      max-width: 220px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-col ul { list-style: none; }
+
+    .footer-col ul li { margin-bottom: 10px; }
+
+    .footer-col ul li a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.48);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: rgba(255,255,255,0.82); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+    }
+
+    .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.3); }
+
+    .footer-bottom a { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .footer-bottom a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ===================== SCROLL REVEAL ===================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      nav { padding: 0 28px; }
+      .about-hero { padding: 100px 36px 60px; }
+      .brand-story { padding: 56px 36px; }
+      .brand-story-inner { gap: 40px; }
+      .core-values { padding: 56px 36px; }
+      .team-section { padding: 56px 36px; }
+      .numbers-section { padding: 56px 36px; }
+      footer { padding: 48px 36px 24px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 768px) {
+      .brand-story-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .numbers-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .about-hero { padding: 80px 20px 48px; }
+      .about-hero-decoration { display: none; }
+      .brand-story { padding: 40px 20px; }
+      .core-values { padding: 40px 20px; }
+      .team-section { padding: 40px 20px; }
+      .numbers-section { padding: 40px 20px; }
+      .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding: 40px 20px 20px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">島嶼旅跡</div>
+    <ul class="nav-links">
+      <li><a href="#">探索體驗</a></li>
+      <li><a href="#" class="active">關於我們</a></li>
+      <li><a href="#">發現周邊</a></li>
+      <li><a href="#">我的訂單</a></li>
+      <li><a href="#" class="nav-cta">登入／註冊</a></li>
+    </ul>
+  </nav>
+
+  <!-- ABOUT HERO -->
+  <section class="about-hero">
+    <div class="about-hero-decoration"></div>
+    <div class="about-hero-content reveal">
+      <div class="section-eyebrow">OUR STORY</div>
+      <h1>
+        我們相信，<br>
+        旅行是一種<span class="accent">真實相遇</span>
+      </h1>
+      <p>從一次花蓮的獨木舟之旅開始，我們看見了台灣每一個角落裡，都有值得被看見的人與故事。島嶼旅跡，就從這裡出發。</p>
+    </div>
+  </section>
+
+  <!-- BRAND STORY -->
+  <section class="brand-story">
+    <div class="brand-story-inner">
+      <div class="brand-story-img reveal">
+        <img
+          src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800&q=80"
+          alt="花蓮日落美景"
+          loading="lazy"
+        />
+      </div>
+      <div class="brand-story-text reveal reveal-delay-1">
+        <div class="section-eyebrow">BRAND STORY</div>
+        <h2>從一次迷路開始的創業</h2>
+        <p>2019 年，創辦人阿峰在花蓮租了一艘獨木舟，卻意外划進一條沒有標示的秘湖。當地的漁民老伯帶著他，用台語講述這片湖的故事。那一刻，他明白了：最珍貴的旅行體驗，不在照片點上。</p>
+        <p>島嶼旅跡於 2020 年成立，致力於連結在地嚮導與每一位渴望深度旅遊的旅人。我們的嚮導不只是帶路人，他們是故事的守護者。</p>
+        <p>今天，我們在台灣 22 個縣市有超過 150 位認證嚮導，服務超過三萬名來自世界各地的旅客，讓每一段旅程都成為值得述說的故事。</p>
+        <a href="#" class="btn-primary">探索所有體驗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE VALUES -->
+  <section class="core-values">
+    <div class="section-eyebrow reveal">CORE VALUES</div>
+    <div class="section-title reveal">我們的三個承諾</div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <span class="value-icon">🌱</span>
+        <h3>在地深度，不走馬看花</h3>
+        <p>每一個體驗都由在地嚮導親心設計，帶你看見最少人看見的台灣。我們的嚮導製點上，只提供真正深入在地生活的體驗。</p>
+      </div>
+      <div class="value-card reveal reveal-delay-1">
+        <span class="value-icon">🛡️</span>
+        <h3>安全保障，安心出發</h3>
+        <p>所有嚮導都通過嚴格資格背景認證、並持有相關專業認照，我們提供全程協助保障，讓你安心且感心出發在體驗上，不用擔心其他。</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <span class="value-icon">🌿</span>
+        <h3>綠色永續，守護這片土地</h3>
+        <p>每筆訂單抽取 5% 將捐入台灣環境保育基金。我們的體驗設計以低衝擊為原則，與自然共存，讓下一代的旅人也能看見同樣美麗的台灣。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEET THE TEAM -->
+  <section class="team-section">
+    <div class="section-eyebrow reveal">MEET THE TEAM</div>
+    <div class="section-title reveal">讓旅行成真的人們</div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <img
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
+          alt="陳建峰"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">創辦人</div>
+          <div class="team-card-name">陳建峰</div>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-1">
+        <img
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80"
+          alt="林芷庭"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">共同創辦人，營運總監</div>
+          <div class="team-card-name">林芷庭</div>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <img
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80"
+          alt="黃俊宏"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">技術總監</div>
+          <div class="team-card-name">黃俊宏</div>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-3">
+        <img
+          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80"
+          alt="許雅婷"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">品牌策略</div>
+          <div class="team-card-name">許雅婷</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BY THE NUMBERS -->
+  <section class="numbers-section">
+    <div class="section-eyebrow">BY THE NUMBERS</div>
+    <div class="numbers-grid">
+      <div class="number-item reveal">
+        <div class="number-value">30,000<span class="accent">+</span></div>
+        <div class="number-label">服務旅客人數</div>
+      </div>
+      <div class="number-item reveal reveal-delay-1">
+        <div class="number-value">150<span class="accent">+</span></div>
+        <div class="number-label">認證在地嚮導</div>
+      </div>
+      <div class="number-item reveal reveal-delay-2">
+        <div class="number-value">200<span class="accent">+</span></div>
+        <div class="number-label">精選體驗項目</div>
+      </div>
+      <div class="number-item reveal reveal-delay-3">
+        <div class="number-value">98<span class="accent">%</span></div>
+        <div class="number-label">旅客滿意度</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">島嶼旅跡</div>
+        <p>深入台灣每一個小鎮，<br>感受在地的真實體驗。<br>我們相信，旅行不只是到過這些地，<br>而是與那片土地真實相遇。</p>
+      </div>
+      <div class="footer-col">
+        <h4>探索</h4>
+        <ul>
+          <li><a href="#">所有體驗</a></li>
+          <li><a href="#">戶外登頂</a></li>
+          <li><a href="#">手工藝</a></li>
+          <li><a href="#">美食料理</a></li>
+          <li><a href="#">文化歷史</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>公司</h4>
+        <ul>
+          <li><a href="#">關於我們</a></li>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">加盟嚮導申請</a></li>
+          <li><a href="#">媒體合作</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>支援</h4>
+        <ul>
+          <li><a href="#">退換政策</a></li>
+          <li><a href="#">隱私政策</a></li>
+          <li><a href="#">服務條款</a></li>
+          <li><a href="#">更新訂單</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+      <a href="#">用心定義台灣，一寸土地。</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // Nav active highlight on scroll (optional enhancement)
+    const sections = document.querySelectorAll('section, .numbers-section');
+  </script>
+</body>
+</html>
