@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>常見問題解答 — 島嶼旅跡 IslandTrace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8633A;
+      --orange-light: #F07A54;
+      --dark: #1A1A2E;
+      --navy: #16213E;
+      --cream: #F5F0EB;
+      --warm-white: #FAF8F5;
+      --text-main: #2C2C2C;
+      --text-muted: #888;
+      --border: #E0DAD3;
+      --star: #E8633A;
+      --serif: 'Noto Serif TC', serif;
+      --sans: 'Noto Sans TC', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-main);
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      background: var(--navy);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-logo .dot {
+      width: 6px; height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: #fff; font-weight: 500; }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; }
+
+    /* ===================== MAIN ===================== */
+    main {
+      flex: 1;
+      padding-top: 60px;
+    }
+
+    /* ===================== FAQ HERO ===================== */
+    .faq-hero {
+      background: var(--warm-white);
+      text-align: center;
+      padding: 64px 72px 56px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-hero-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .faq-hero-eyebrow::before,
+    .faq-hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 32px; height: 1.5px;
+      background: var(--orange);
+    }
+
+    .faq-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .faq-hero p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ===================== FAQ CONTENT ===================== */
+    .faq-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    /* ===================== TABS ===================== */
+    .faq-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .tab-btn {
+      padding: 9px 20px;
+      border-radius: 24px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text-main);
+      font-size: 13px;
+      font-family: var(--sans);
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .tab-btn.active {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* ===================== FAQ SECTION ===================== */
+    .faq-section { display: none; }
+    .faq-section.active { display: block; }
+
+    .faq-section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .faq-section-title .section-icon {
+      font-size: 18px;
+    }
+
+    /* ===================== ACCORDION ===================== */
+    .accordion-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      cursor: pointer;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+
+    .accordion-header:hover .accordion-question {
+      color: var(--orange);
+    }
+
+    .accordion-header.open .accordion-question {
+      color: var(--orange);
+    }
+
+    .accordion-question {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-main);
+      transition: color 0.2s;
+      line-height: 1.5;
+    }
+
+    .accordion-icon {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .accordion-header.open .accordion-icon {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+      transform: rotate(0deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 0 0 20px;
+    }
+
+    .accordion-body.open {
+      display: block;
+    }
+
+    .accordion-body p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.9;
+    }
+
+    /* ===================== CONTACT CARD ===================== */
+    .contact-card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 52px;
+    }
+
+    .contact-card h3 {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .contact-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .contact-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      padding: 12px 26px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--sans);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--orange-light); }
+
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--text-main);
+      border: 1.5px solid var(--border);
+      border-radius: 28px;
+      padding: 11px 26px;
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      font-family: var(--sans);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: border-color 0.2s;
+    }
+    .btn-outline-dark:hover { border-color: var(--text-main); }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: var(--navy);
+      padding: 60px 72px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-brand .logo {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .footer-brand .logo .dot {
+      width: 5px; height: 5px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .footer-brand p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.9;
+      max-width: 220px;
+      margin-top: 10px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-col ul { list-style: none; }
+
+    .footer-col ul li { margin-bottom: 10px; }
+
+    .footer-col ul li a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.42);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: rgba(255,255,255,0.82); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+    }
+
+    .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.28); }
+    .footer-bottom a { font-size: 11px; color: rgba(255,255,255,0.28); }
+    .footer-bottom a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      nav { padding: 0 28px; }
+      .faq-hero { padding: 56px 36px 48px; }
+      .faq-content { padding: 48px 36px 72px; }
+      footer { padding: 48px 36px 24px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .faq-hero { padding: 48px 20px 40px; }
+      .faq-content { padding: 36px 20px 60px; }
+      .contact-card { padding: 32px 20px; }
+      footer { padding: 40px 20px 20px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      島嶼旅跡<span class="dot"></span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">探索體驗</a></li>
+      <li><a href="#">關於我們</a></li>
+      <li><a href="#" class="active">常見問題</a></li>
+      <li><a href="#">我的訂單</a></li>
+      <li><a href="#" class="nav-cta">登入 / 註冊</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- FAQ HERO -->
+    <div class="faq-hero">
+      <div class="faq-hero-eyebrow">FAQ</div>
+      <h1>常見問題解答</h1>
+      <p>找不到答案？歡迎直接聯絡我們的客服團隊。</p>
+    </div>
+
+    <!-- FAQ CONTENT -->
+    <div class="faq-content">
+
+      <!-- TABS -->
+      <div class="faq-tabs">
+        <button class="tab-btn active" data-target="booking">預訂問題</button>
+        <button class="tab-btn" data-target="refund">退款政策</button>
+        <button class="tab-btn" data-target="experience">體驗當日</button>
+        <button class="tab-btn" data-target="payment">帳號與付款</button>
+      </div>
+
+      <!-- SECTION: 預訂問題 -->
+      <div class="faq-section active" id="booking">
+        <div class="faq-section-title">
+          <span class="section-icon">🗓️</span> 預訂問題
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header open" onclick="toggleAccordion(this)">
+            <span class="accordion-question">如何預訂體驗？</span>
+            <span class="accordion-icon">✕</span>
+          </div>
+          <div class="accordion-body open">
+            <p>在體驗詳情頁選擇日期與人數，點擊「立刻預訂」後，填寫聯絡資料並完成付款即可。完成後系統會自動寄送確認 Email 到您的信箱，請注意查收。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">最少需要幾人才能成團？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>各體驗的最低成團人數不同，請在體驗詳情頁查看相關說明。通常 1–2 人即可成團，部分特殊體驗可能需要最低 3 人。若成團人數不足，我們會提前 3 天通知您並安排退款或改期。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">可以替他人代訂體驗嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>可以！您可以為親友代訂體驗，填寫聯絡資料時請填寫實際參加者的姓名與聯絡電話，以便嚮導在當天確認身份。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">預訂後可以修改日期嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>可以，在體驗日期前 72 小時內均可免費改期一次。請登入會員中心，進入「我的訂單」頁面操作，或聯絡客服協助處理。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 退款政策 -->
+      <div class="faq-section" id="refund">
+        <div class="faq-section-title">
+          <span class="section-icon">💳</span> 退款政策
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">如何申請退款？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>請登入會員中心，進入「我的訂單」頁面，選擇要取消的訂單後點選「申請退款」。退款金額將依照取消時間點計算，通常於 5–7 個工作天內退回原付款帳戶。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">退款的時間政策是什麼？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>體驗開始前 7 天以上取消：全額退款。體驗前 3–7 天取消：退款 50%。體驗前 3 天內取消：不予退款。如遇颱風或不可抗力因素，將另行評估全額退款。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">嚮導取消體驗時我可以退款嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>若嚮導因故取消體驗，我們將全額退款給您，並優先協助安排相似的替代體驗。我們會在取消後 24 小時內主動與您聯繫。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 體驗當日 -->
+      <div class="faq-section" id="experience">
+        <div class="faq-section-title">
+          <span class="section-icon">🗺️</span> 體驗當日
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">我需要提前多久抵達集合地點？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>建議您提前 10–15 分鐘抵達集合地點，讓嚮導有足夠時間確認人數並進行行前說明。集合地點與時間將於確認 Email 中詳細說明。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">體驗需要攜帶什麼？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>不同體驗的裝備需求不同，請參考各體驗頁面的「注意事項」欄位。一般建議攜帶：個人證件、舒適的服裝與鞋子、飲用水，以及防曬用品（戶外體驗）。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">下雨天體驗還會舉辦嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>一般室內體驗不受天氣影響。戶外體驗遇小雨通常照常進行，嚮導將視當天天氣狀況判斷是否調整行程。若遇颱風等惡劣天氣，我們會主動聯繫您安排改期或退款。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 帳號與付款 -->
+      <div class="faq-section" id="payment">
+        <div class="faq-section-title">
+          <span class="section-icon">🔐</span> 帳號與付款
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">支援哪些付款方式？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>目前支援信用卡（Visa、MasterCard、JCB）、LINE Pay、街口支付，以及銀行轉帳。所有付款流程均採 SSL 加密保護，安全有保障。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">我可以索取發票嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>可以，付款完成後我們將自動開立電子發票並寄送至您的 Email。如需統編發票，請在結帳時填寫公司統一編號與抬頭。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">如何重設密碼？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>請點選登入頁面的「忘記密碼」，輸入您的註冊 Email 後，系統將寄送重設密碼連結至您的信箱。連結有效時間為 30 分鐘，請盡快完成操作。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT CARD -->
+      <div class="contact-card">
+        <h3>還有其他問題？</h3>
+        <p>我們的客服團隊週一到週五 09:00–18:00 線上為您解答</p>
+        <div class="contact-actions">
+          <button class="btn-primary">
+            ✉ 寄信給我們
+          </button>
+          <button class="btn-outline-dark">
+            💬 即時客服
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">島嶼旅跡<span class="dot"></span></div>
+        <p>深入台灣每一個小鎮，<br>遇見最在地的感動體驗。<br>我們相信，旅行不只是到達目的，<br>而是與這片土地真實相遇。</p>
+      </div>
+      <div class="footer-col">
+        <h4>探索</h4>
+        <ul>
+          <li><a href="#">所有體驗</a></li>
+          <li><a href="#">戶外冒險</a></li>
+          <li><a href="#">手作工藝</a></li>
+          <li><a href="#">美食料理</a></li>
+          <li><a href="#">文化歷史</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>公司</h4>
+        <ul>
+          <li><a href="#">關於我們</a></li>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">旅遊嚮導招募</a></li>
+          <li><a href="#">媒體合作</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>支援</h4>
+        <ul>
+          <li><a href="#">退款政策</a></li>
+          <li><a href="#">隱私政策</a></li>
+          <li><a href="#">服務條款</a></li>
+          <li><a href="#">查看訂單</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+      <a href="#">用心丈量台灣每一寸土地</a>
+    </div>
+  </footer>
+
+  <script>
+    // ===================== TABS =====================
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const faqSections = document.querySelectorAll('.faq-section');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        faqSections.forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target).classList.add('active');
+      });
+    });
+
+    // ===================== ACCORDION =====================
+    function toggleAccordion(header) {
+      const body = header.nextElementSibling;
+      const icon = header.querySelector('.accordion-icon');
+      const isOpen = header.classList.contains('open');
+
+      // Close all in same section
+      const section = header.closest('.faq-section');
+      section.querySelectorAll('.accordion-header.open').forEach(h => {
+        if (h !== header) {
+          h.classList.remove('open');
+          h.nextElementSibling.classList.remove('open');
+          h.querySelector('.accordion-icon').textContent = '+';
+        }
+      });
+
+      if (isOpen) {
+        header.classList.remove('open');
+        body.classList.remove('open');
+        icon.textContent = '+';
+      } else {
+        header.classList.add('open');
+        body.classList.add('open');
+        icon.textContent = '✕';
+      }
+    }
+  </script>
+
+</body>
+</html>
