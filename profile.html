@@ -1,11 +1,310 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>我的訂單｜島嶼旅跡</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #E8633A;
+            --navy: #16213E;
+            --cream: #F8F5F2;
+            --border: #E6DED7;
+            --text: #2C2C2C;
+            --muted: #888;
+        }
+
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+            background: #FAFAFA;
+            color: var(--text);
+        }
+
+        /* 主區塊 */
+        .order-wrapper {
+            max-width: 1200px;
+            margin: 120px auto 80px;
+            display: flex;
+            gap: 40px;
+            padding: 0 40px;
+        }
+
+        /* 左側 */
+        .sidebar {
+            width: 260px;
+        }
+
+        /* 會員卡 */
+        .member-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .05);
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid var(--orange);
+            margin: 0 auto 15px;
+            overflow: hidden;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .member-mail {
+            color: var(--muted);
+            margin-bottom: 15px;
+        }
+
+        .member-tag {
+            display: inline-block;
+            background: #EDF7EF;
+            color: #3E8D55;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* 左側選單 */
+        .side-menu {
+            margin-top: 25px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 15px;
+        }
+
+        .menu-item {
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: .3s;
+        }
+
+        .menu-item:hover {
+            background: #F7F1ED;
+        }
+
+        .menu-item.active {
+            background: #FCEFE9;
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        /* 右側 */
+        .order-content {
+            flex: 1;
+            background: #fff;
+            border-radius: 20px;
+            padding: 35px;
+        }
+
+        .order-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        /* 表頭 */
+        .order-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        /* 訂單卡 */
+        .order-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-product {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .order-product img {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .order-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .order-location {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .price {
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .pending {
+            background: #FFF2EB;
+            color: var(--orange);
+        }
+
+        .done {
+            background: #EAF8EE;
+            color: #3E8D55;
+        }
+
+        .cancel-btn {
+            border: 1px solid var(--orange);
+            background: white;
+            color: var(--orange);
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .cancel-btn:hover {
+            background: var(--orange);
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
-    
+
+    <div class="order-wrapper">
+
+        <!-- 左側 -->
+        <aside class="sidebar">
+
+            <div class="member-card">
+                <div class="member-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" alt="">
+                </div>
+                <div class="member-name">旅遊達人</div>
+                <div class="member-mail">demo@islandtrace.tw</div>
+                <div class="member-tag">探索會員</div>
+            </div>
+
+            <div class="side-menu">
+                <div class="menu-item active">📋 訂單紀錄</div>
+                <div class="menu-item">❤️ 我的收藏</div>
+                <div class="menu-item">👤 個人資料</div>
+                <div class="menu-item">🚪 登出</div>
+            </div>
+
+        </aside>
+
+        <!-- 右側 -->
+        <main class="order-content">
+
+            <h1 class="order-title">訂單紀錄</h1>
+
+            <div class="order-header">
+                <div>體驗</div>
+                <div>日期 / 場次</div>
+                <div>金額</div>
+                <div>狀態</div>
+                <div></div>
+            </div>
+
+            <div class="order-item">
+                <div class="order-product">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300">
+                    <div>
+                        <div class="order-name">清水斷崖獨木舟探險</div>
+                        <div class="order-location">📍 花蓮</div>
+                    </div>
+                </div>
+                <div>2025/7/15<br>上午場 09:00</div>
+                <div class="price">NT$ 1,800</div>
+                <div><span class="status pending">未出發</span></div>
+                <div><button class="cancel-btn">取消訂單</button></div>
+            </div>
+
+            <div class="order-item">
+                <div class="order-product">
+                    <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=300">
+                    <div>
+                        <div class="order-name">淡水老街藍染拼布工作坊</div>
+                        <div class="order-location">📍 新北</div>
+                    </div>
+                </div>
+                <div>2025/5/20<br>下午場 14:00</div>
+                <div class="price">NT$ 1,200</div>
+                <div><span class="status done">已完成</span></div>
+                <div></div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+
+        // 左側選單切換
+        const menuItems = document.querySelectorAll(".menu-item");
+
+        menuItems.forEach(item => {
+            item.addEventListener("click", function () {
+                menuItems.forEach(i => i.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+
+        // 取消訂單
+        const cancelBtns = document.querySelectorAll(".cancel-btn");
+
+        cancelBtns.forEach(btn => {
+            btn.addEventListener("click", function () {
+                const confirmCancel = confirm("確定要取消這筆訂單嗎？");
+
+                if (confirmCancel) {
+                    alert("訂單已取消");
+                    this.closest(".order-item").remove();
+                }
+            });
+        });
+
+    </script>
+
 </body>
+
 </html>
