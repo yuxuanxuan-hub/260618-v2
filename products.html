@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>探索體驗 — 島嶼旅跡 IslandTrace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ===== RESET & 基本設定 ===== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS 變數（顏色、字型）統一管理，方便日後修改 */
+        :root {
+            --orange: #E8633A;
+            --orange-light: #F07A54;
+            --dark: #1A1A2E;
+            --navy: #16213E;
+            --cream: #F5F0EB;
+            --warm-white: #FAF8F5;
+            --text-main: #2C2C2C;
+            --text-muted: #888;
+            --border: #E0DAD3;
+            --star: #E8633A;
+            --serif: 'Noto Serif TC', serif;
+            --sans: 'Noto Sans TC', sans-serif;
+        }
+
+        body {
+            font-family: var(--sans);
+            color: var(--text-main);
+            background: #fff;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===================== NAV（與首頁相同）===================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            height: 60px;
+            background: rgba(20, 20, 35, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .nav-logo {
+            font-family: var(--serif);
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.04em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a.active {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .nav-cta {
+            background: var(--orange);
+            color: #fff !important;
+            padding: 7px 18px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--orange-light) !important;
+        }
+
+        /* ===================== 麵包屑（Breadcrumb）===================== */
+        .breadcrumb {
+            margin-top: 60px;
+            /* nav 高度補償 */
+            padding: 14px 48px;
+            background: var(--warm-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--orange);
+        }
+
+        .breadcrumb .sep {
+            color: var(--border);
+        }
+
+        .breadcrumb .current {
+            color: var(--text-main);
+        }
+
+        /* ===================== 主內容區：左篩選 + 右卡片 ===================== */
+        .explore-wrapper {
+            display: flex;
+            gap: 0;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 48px 80px;
+            align-items: flex-start;
+        }
+
+        /* ===== 左側篩選欄 ===== */
+        .filter-sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            position: sticky;
+            /* 讓篩選欄跟著頁面滾動固定 */
+            top: 76px;
+            padding-right: 32px;
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .filter-header h2 {
+            font-family: var(--serif);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .filter-clear {
+            font-size: 12px;
+            color: var(--orange);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--sans);
+            padding: 0;
+        }
+
+        .filter-clear:hover {
+            text-decoration: underline;
+        }
+
+        /* 篩選區塊 */
+        .filter-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+        }
+
+        .filter-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        /* 標籤式篩選按鈕 */
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-btn {
+            padding: 5px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: var(--sans);
+            color: var(--text-main);
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .tag-btn:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        /* 選中狀態 */
+        .tag-btn.active {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: #fff;
+        }
+
+        /* 圖示主題標籤（帶 emoji） */
+        .tag-btn.has-icon {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 價格範圍輸入 */
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-input {
+            flex: 1;
+            padding: 7px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: var(--sans);
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.18s;
+        }
+
+        .price-input:focus {
+            border-color: var(--orange);
+        }
+
+        .price-sep {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* ===== 右側內容區 ===== */
+        .explore-main {
+            flex: 1;
+            min-width: 0;
+            /* 防止 flex 子元素溢出 */
+        }
+
+        /* 頂部工具列：結果數量 + 排序 */
+        .explore-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .result-count strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .sort-select {
+            padding: 7px 32px 7px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: var(--sans);
+            color: var(--text-main);
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23888' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .sort-select:focus {
+            border-color: var(--orange);
+        }
+
+        /* ===== 卡片網格 ===== */
+        /* 使用 CSS Grid 自動計算欄數 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 欄 */
+            gap: 20px;
+        }
+
+        /* 單張卡片 */
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            transition: transform 0.22s, box-shadow 0.22s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 卡片圖片區 */
+        .card-img {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+            background: #ddd;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-img img {
+            transform: scale(1.04);
+        }
+
+        /* 左上角分類徽章 */
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        /* 右上角收藏按鈕 */
+        .card-fav {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.18s;
+            border: none;
+        }
+
+        .card-fav:hover {
+            background: #fff;
+        }
+
+        .card-fav.liked {
+            color: var(--orange);
+        }
+
+        /* 卡片文字區 */
+        .card-body {
+            padding: 14px 16px 16px;
+        }
+
+        .card-type {
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            margin-bottom: 5px;
+        }
+
+        .card-title {
+            font-family: var(--serif);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        /* 地點 · 時間 */
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .card-meta .dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .card-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .card-price span {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        /* 星星評分 */
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .stars {
+            color: var(--star);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .rating-count {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ===================== FOOTER（與首頁相同）===================== */
+        footer {
+            background: var(--navy);
+            color: rgba(255, 255, 255, 0.78);
+            padding: 64px 48px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr 1fr;
+            gap: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-brand .logo {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 12px;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .footer-col h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.55);
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ====== NAV ====== -->
+    <nav>
+        <a href="index.html" class="nav-logo">島嶼旅跡 ·</a>
+        <ul class="nav-links">
+            <li><a href="#" class="active">探索體驗</a></li>
+            <li><a href="#">關於我們</a></li>
+            <li><a href="#">常見問題</a></li>
+            <li><a href="#">我的訂單</a></li>
+            <li><a href="#" class="nav-cta">登入 / 註冊</a></li>
+        </ul>
+    </nav>
+
+    <!-- ====== 麵包屑 ====== -->
+    <div class="breadcrumb">
+        <a href="index.html">首頁</a>
+        <span class="sep">›</span>
+        <span class="current">探索體驗</span>
+    </div>
+
+    <!-- ====== 主內容：篩選欄 + 卡片區 ====== -->
+    <div class="explore-wrapper">
+
+        <!-- ===== 左側篩選欄 ===== -->
+        <aside class="filter-sidebar">
+            <div class="filter-header">
+                <h2>篩選條件</h2>
+                <button class="filter-clear" onclick="clearFilters()">清除全部</button>
+            </div>
+
+            <!-- 地區 -->
+            <div class="filter-section">
+                <div class="filter-section-title">地區</div>
+                <div class="tag-group" id="region-tags">
+                    <button class="tag-btn" onclick="toggleTag(this)">台北</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">新北</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">台中</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">台南</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">高雄</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">宜蘭</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">花蓮</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">嘉義</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">屏東</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">彰化</button>
+                </div>
+            </div>
+
+            <!-- 主題分類 -->
+            <div class="filter-section">
+                <div class="filter-section-title">主題分類</div>
+                <div class="tag-group" id="theme-tags">
+                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🏔️ 戶外</button>
+                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🎨 手作</button>
+                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🍜 美食</button>
+                    <button class="tag-btn has-icon" onclick="toggleTag(this)">🏛️ 文化</button>
+                </div>
+            </div>
+
+            <!-- 時間 -->
+            <div class="filter-section">
+                <div class="filter-section-title">時間</div>
+                <div class="tag-group" id="time-tags">
+                    <button class="tag-btn" onclick="toggleTag(this)">2小時</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">3小時</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">4小時</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">半天</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">全天</button>
+                </div>
+            </div>
+
+            <!-- 價格範圍 -->
+            <div class="filter-section">
+                <div class="filter-section-title">價格範圍（NT$）</div>
+                <div class="price-range">
+                    <input class="price-input" type="number" placeholder="最低" id="price-min" />
+                    <span class="price-sep">—</span>
+                    <input class="price-input" type="number" placeholder="最高" id="price-max" />
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== 右側主要區域 ===== -->
+        <main class="explore-main">
+
+            <!-- 工具列：結果數 + 排序 -->
+            <div class="explore-toolbar">
+                <div class="result-count">共找到 <strong id="count">12</strong> 個體驗</div>
+                <select class="sort-select" id="sort-select">
+                    <option>預設排序</option>
+                    <option>價格：低到高</option>
+                    <option>價格：高到低</option>
+                    <option>評分最高</option>
+                    <option>最多評論</option>
+                </select>
+            </div>
+
+            <!-- 卡片網格 -->
+            <div class="cards-grid" id="cards-grid">
+
+                <!-- Card 1 -->
+                <div class="card" data-region="台北" data-theme="戶外" data-time="半天" data-price="1800">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75" alt="木升探險"
+                            loading="lazy" />
+                        <div class="card-badge">戶外冒險</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">戶外冒險</div>
+                        <div class="card-title">清水斷崖獨木舟探險</div>
+                        <div class="card-meta">
+                            <span>花蓮</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$1,800 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(312)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card" data-region="新北" data-theme="手作" data-time="3小時" data-price="980">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=75" alt="陶藝"
+                            loading="lazy" />
+                        <div class="card-badge">手作工藝</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">手作工藝</div>
+                        <div class="card-title">九份老街手捏陶藝體驗</div>
+                        <div class="card-meta">
+                            <span>新北</span>
+                            <div class="dot"></div><span>3小時</span>
+                        </div>
+                        <div class="card-price">NT$980 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(205)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card" data-region="台中" data-theme="美食" data-time="4小時" data-price="1500">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=75" alt="料理課"
+                            loading="lazy" />
+                        <div class="card-badge">美食料理</div>
+                        <button class="card-fav liked" onclick="toggleFav(this)">♥</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">美食料理</div>
+                        <div class="card-title">台中市場私廚料理課</div>
+                        <div class="card-meta">
+                            <span>台中</span>
+                            <div class="dot"></div><span>4小時</span>
+                        </div>
+                        <div class="card-price">NT$1,500 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(189)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="card" data-region="嘉義" data-theme="戶外" data-time="全天" data-price="2200">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=600&q=75" alt="阿里山"
+                            loading="lazy" />
+                        <div class="card-badge">自然探索</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">自然探索</div>
+                        <div class="card-title">阿里山日出觀星嚮導</div>
+                        <div class="card-meta">
+                            <span>嘉義</span>
+                            <div class="dot"></div><span>全天</span>
+                        </div>
+                        <div class="card-price">NT$2,200 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(98)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="card" data-region="新北" data-theme="手作" data-time="4小時" data-price="1200">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=75" alt="藍染"
+                            loading="lazy" />
+                        <div class="card-badge">手作工藝</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">手作工藝</div>
+                        <div class="card-title">淡水老街藍染拼布工作坊</div>
+                        <div class="card-meta">
+                            <span>新北</span>
+                            <div class="dot"></div><span>3小時</span>
+                        </div>
+                        <div class="card-price">NT$1,200 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(147)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="card" data-region="台南" data-theme="文化" data-time="半天" data-price="800">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75" alt="古蹟"
+                            loading="lazy" />
+                        <div class="card-badge">文化歷史</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">文化歷史</div>
+                        <div class="card-title">台南府城古蹟深度導覽</div>
+                        <div class="card-meta">
+                            <span>台南</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$800 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(261)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7 -->
+                <div class="card" data-region="宜蘭" data-theme="戶外" data-time="半天" data-price="1100">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75" alt="農場"
+                            loading="lazy" />
+                        <div class="card-badge">自然探索</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">自然探索</div>
+                        <div class="card-title">宜蘭梯田生態農場體驗</div>
+                        <div class="card-meta">
+                            <span>宜蘭</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$1,100 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(173)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 8 -->
+                <div class="card" data-region="高雄" data-theme="美食" data-time="4小時" data-price="1350">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="海鮮"
+                            loading="lazy" />
+                        <div class="card-badge">美食料理</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">美食料理</div>
+                        <div class="card-title">高雄漁港老漁料理日</div>
+                        <div class="card-meta">
+                            <span>高雄</span>
+                            <div class="dot"></div><span>4小時</span>
+                        </div>
+                        <div class="card-price">NT$1,350 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(142)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 9 -->
+                <div class="card" data-region="花蓮" data-theme="戶外" data-time="全天" data-price="2500">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1434725039720-aaad6dd32dfe?w=600&q=75" alt="峽谷"
+                            loading="lazy" />
+                        <div class="card-badge">戶外冒險</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">戶外冒險</div>
+                        <div class="card-title">太魯閣峽谷健行之旅</div>
+                        <div class="card-meta">
+                            <span>花蓮</span>
+                            <div class="dot"></div><span>全天</span>
+                        </div>
+                        <div class="card-price">NT$2,500 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(287)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 10 -->
+                <div class="card" data-region="彰化" data-theme="文化" data-time="2小時" data-price="700">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600&q=75" alt="鐵道"
+                            loading="lazy" />
+                        <div class="card-badge">文化歷史</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">文化歷史</div>
+                        <div class="card-title">彰化扇形車庫鐵道文化探索</div>
+                        <div class="card-meta">
+                            <span>彰化</span>
+                            <div class="dot"></div><span>2小時</span>
+                        </div>
+                        <div class="card-price">NT$700 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(118)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 11 -->
+                <div class="card" data-region="屏東" data-theme="戶外" data-time="半天" data-price="1650">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1682686580391-615b1f28e5ee?w=600&q=75" alt="潛水"
+                            loading="lazy" />
+                        <div class="card-badge">戶外冒險</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">戶外冒險</div>
+                        <div class="card-title">墾丁珊瑚礁浮潛體驗</div>
+                        <div class="card-meta">
+                            <span>屏東</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$1,650 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(234)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 12 -->
+                <div class="card" data-region="台北" data-theme="文化" data-time="2小時" data-price="1200">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1545315003-c5ad6226c272?w=600&q=75" alt="茶道"
+                            loading="lazy" />
+                        <div class="card-badge">文化歷史</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">文化歷史</div>
+                        <div class="card-title">台北茶道文化靜心體驗</div>
+                        <div class="card-meta">
+                            <span>台北</span>
+                            <div class="dot"></div><span>2小時</span>
+                        </div>
+                        <div class="card-price">NT$1,200 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(196)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end cards-grid -->
+        </main>
+    </div><!-- end explore-wrapper -->
+
+    <!-- ====== FOOTER ====== -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">島嶼旅跡</div>
+                <p>深入台灣每一個小鎮，<br>感受在地的真實故事。<br>我們相信，旅行不只是到達目的地，<br>而是與那片土地真實相遇。</p>
+            </div>
+            <div class="footer-col">
+                <h4>探索</h4>
+                <ul>
+                    <li><a href="#">所有體驗</a></li>
+                    <li><a href="#">戶外冒險</a></li>
+                    <li><a href="#">手作工藝</a></li>
+                    <li><a href="#">美食料理</a></li>
+                    <li><a href="#">文化歷史</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>公司</h4>
+                <ul>
+                    <li><a href="#">關於我們</a></li>
+                    <li><a href="#">常見問答</a></li>
+                    <li><a href="#">旅遊嚮導招募</a></li>
+                    <li><a href="#">媒體合作</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>支援</h4>
+                <ul>
+                    <li><a href="#">退換政策</a></li>
+                    <li><a href="#">隱私政策</a></li>
+                    <li><a href="#">服務條款</a></li>
+                    <li><a href="#">查看訂單</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+            <a href="#">用心定義台灣每一寸土地</a>
+        </div>
+    </footer>
+
+    <!-- ====== JavaScript：篩選互動邏輯 ====== -->
+    <script>
+        // ── 功能一：切換標籤選中狀態 ──
+        // 當使用者點擊標籤按鈕，加上或移除 active class
+        function toggleTag(btn) {
+            btn.classList.toggle('active');
+            filterCards(); // 每次點擊都重新篩選
+        }
+
+        // ── 功能二：清除所有篩選 ──
+        function clearFilters() {
+            // 找出所有帶 active class 的按鈕，逐一移除
+            document.querySelectorAll('.tag-btn.active').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // 清空價格輸入
+            document.getElementById('price-min').value = '';
+            document.getElementById('price-max').value = '';
+            filterCards();
+        }
+
+        // ── 功能三：收藏切換 ──
+        function toggleFav(btn) {
+            // 如果目前是「已收藏」就取消，否則加入收藏
+            if (btn.classList.contains('liked')) {
+                btn.classList.remove('liked');
+                btn.textContent = '♡'; // 空心愛心
+            } else {
+                btn.classList.add('liked');
+                btn.textContent = '♥'; // 實心愛心
+                btn.style.color = 'var(--orange)';
+            }
+        }
+
+        // ── 功能四：篩選卡片 ──
+        function filterCards() {
+            // 收集目前選中的地區
+            const activeRegions = [...document.querySelectorAll('#region-tags .tag-btn.active')]
+                .map(btn => btn.textContent.trim());
+
+            // 收集目前選中的時間
+            const activeTimes = [...document.querySelectorAll('#time-tags .tag-btn.active')]
+                .map(btn => btn.textContent.trim());
+
+            // 收集目前選中的主題（去掉 emoji）
+            const activeThemes = [...document.querySelectorAll('#theme-tags .tag-btn.active')]
+                .map(btn => btn.textContent.trim().slice(2)); // 移除前兩個字元（emoji + 空格）
+
+            // 讀取價格範圍
+            const minPrice = parseInt(document.getElementById('price-min').value) || 0;
+            const maxPrice = parseInt(document.getElementById('price-max').value) || Infinity;
+
+            // 取得所有卡片
+            const cards = document.querySelectorAll('.card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const region = card.dataset.region;   // 從 data-region 取地區
+                const theme = card.dataset.theme;    // 從 data-theme 取主題
+                const time = card.dataset.time;     // 從 data-time 取時間
+                const price = parseInt(card.dataset.price); // 從 data-price 取價格
+
+                // 判斷是否符合地區篩選（沒有選則全部顯示）
+                const regionOk = activeRegions.length === 0 || activeRegions.includes(region);
+                const timeOk = activeTimes.length === 0 || activeTimes.includes(time);
+                const themeOk = activeThemes.length === 0 || activeThemes.some(t => theme.includes(t));
+                const priceOk = price >= minPrice && price <= maxPrice;
+
+                if (regionOk && timeOk && themeOk && priceOk) {
+                    card.style.display = '';    // 顯示
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none'; // 隱藏
+                }
+            });
+
+            // 更新結果數量
+            document.getElementById('count').textContent = visibleCount;
+        }
+
+        // ── 監聽價格輸入，即時篩選 ──
+        document.getElementById('price-min').addEventListener('input', filterCards);
+        document.getElementById('price-max').addEventListener('input', filterCards);
+    </script>
+
+</body>
+
+</html>
