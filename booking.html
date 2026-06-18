@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>島嶼旅跡 · 預訂體驗</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8633A;
+      --orange-light: #F07A54;
+      --orange-pale: #FDF1EC;
+      --dark: #1A1A2E;
+      --navy: #16213E;
+      --cream: #F5F0EB;
+      --warm-white: #FAF8F5;
+      --text-main: #2C2C2C;
+      --text-muted: #999;
+      --border: #E0DAD3;
+      --green: #3BAA6E;
+      --serif: 'Noto Serif TC', serif;
+      --sans: 'Noto Sans TC', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-main);
+      background: var(--warm-white);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      background: var(--navy);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-logo::after {
+      content: '·';
+      color: var(--orange);
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; }
+
+    /* ===== PAGE WRAPPER ===== */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ===== STEPPER ===== */
+    .stepper-wrap {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0 20px;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      border: 2px solid var(--border);
+      background: #fff;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+
+    .step-item.done .step-circle {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .step-item.active .step-circle {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .step-item.active .step-label { color: var(--orange); font-weight: 600; }
+    .step-item.done .step-label { color: var(--green); }
+
+    .step-line {
+      height: 2px;
+      width: 100px;
+      background: var(--border);
+      margin-bottom: 20px;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+    .step-line.done { background: var(--orange); }
+
+    /* ===== MAIN CONTENT ===== */
+    .booking-body {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* Step 1 only uses full single-col */
+    .booking-body.single {
+      grid-template-columns: 620px;
+      justify-content: center;
+    }
+
+    /* ===== CARD ===== */
+    .booking-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .card-section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text-main);
+    }
+
+    .card-section-title .icon {
+      font-size: 16px;
+    }
+
+    /* ===== CALENDAR ===== */
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .cal-month {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .cal-nav {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      width: 32px; height: 32px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .cal-nav:hover { border-color: var(--orange); color: var(--orange); }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .cal-dow {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 6px 0;
+      font-weight: 500;
+    }
+
+    .cal-day {
+      width: 40px; height: 40px;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+    }
+
+    .cal-day:hover:not(.disabled):not(.empty) {
+      background: var(--orange-pale);
+      color: var(--orange);
+    }
+
+    .cal-day.selected {
+      background: var(--orange);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .cal-day.today {
+      border: 1.5px solid var(--orange);
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    .cal-day.today.selected {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .cal-day.disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .cal-day.empty { cursor: default; }
+
+    /* ===== SESSION ===== */
+    .session-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 28px 0 14px;
+      color: var(--text-main);
+    }
+
+    .session-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .session-btn {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      background: #fff;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .session-btn:hover { border-color: var(--orange); }
+
+    .session-btn.selected {
+      border-color: var(--orange);
+      background: var(--orange-pale);
+    }
+
+    .session-btn .time {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .session-btn .tag {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .session-btn .tag .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .dot-am { background: #F5A623; }
+    .dot-pm { background: #E8633A; }
+
+    /* ===== NEXT BTN ===== */
+    .next-btn {
+      width: 100%;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 40px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--sans);
+      margin-top: 28px;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    .next-btn:disabled {
+      background: #ddd;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .next-btn:not(:disabled):hover { background: var(--orange-light); }
+
+    /* ===== SUMMARY CARD ===== */
+    .summary-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .summary-card h3 {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .summary-img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      background: #e0dbd5;
+    }
+
+    .summary-name {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .summary-row:last-child { border-bottom: none; }
+
+    .summary-row .label { color: var(--text-muted); }
+
+    .summary-row .value { font-weight: 600; }
+
+    .summary-row .value.orange { color: var(--orange); }
+
+    .summary-row .value.pending { color: var(--orange); font-weight: 400; }
+
+    .summary-row .value.price {
+      font-family: var(--serif);
+      font-size: 16px;
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    /* ===== STEP 2 FORM ===== */
+    .form-section { margin-bottom: 24px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-group label .req { color: var(--orange); }
+
+    .form-input {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-family: var(--sans);
+      color: var(--text-main);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--orange); }
+    .form-input::placeholder { color: #bbb; }
+    .form-input.error { border-color: #e74c3c; }
+
+    textarea.form-input {
+      resize: none;
+      height: 88px;
+      line-height: 1.6;
+    }
+
+    .error-msg {
+      font-size: 11px;
+      color: #e74c3c;
+      display: none;
+    }
+    .form-group.has-error .error-msg { display: block; }
+    .form-group.has-error .form-input { border-color: #e74c3c; }
+
+    /* ===== PAYMENT OPTIONS ===== */
+    .pay-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+    .pay-option {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .pay-option:hover { border-color: var(--orange); }
+    .pay-option.selected { border-color: var(--orange); background: var(--orange-pale); }
+
+    .pay-icon {
+      width: 36px; height: 28px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .pay-icon.cc { background: #1A73E8; color: #fff; font-size: 13px; font-weight: 700; }
+    .pay-icon.line { background: #00B900; color: #fff; font-size: 14px; font-weight: 700; }
+    .pay-icon.apple { background: #000; color: #fff; font-size: 16px; }
+
+    .pay-info .name { font-size: 13px; font-weight: 600; }
+    .pay-info .sub { font-size: 11px; color: var(--text-muted); }
+
+    /* credit card fields */
+    #cc-fields { display: none; margin-top: 4px; }
+    #cc-fields.show { display: block; }
+
+    .cc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* confirm btn */
+    .confirm-btn {
+      width: 100%;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 40px;
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--sans);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .confirm-btn:disabled { background: #ddd; color: #aaa; cursor: not-allowed; }
+    .confirm-btn:not(:disabled):hover { background: var(--orange-light); }
+
+    .confirm-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+    .confirm-note a { color: var(--orange); }
+
+    /* ===== SUCCESS PAGE ===== */
+    .success-page {
+      min-height: calc(100vh - 60px - 320px);
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* confetti */
+    .confetti-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      animation: fall linear infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 0.85; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    .success-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px 80px;
+    }
+
+    /* stepper wrapper inside success */
+    .success-stepper {
+      width: 100%;
+      background: #fff;
+      padding: 24px 0 20px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .check-icon {
+      width: 72px; height: 72px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      color: #fff;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 20px rgba(59,170,110,0.3);
+    }
+
+    .success-title {
+      font-family: var(--serif);
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .success-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .order-card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+
+    .order-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .order-card-header h4 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .order-id {
+      background: var(--dark);
+      color: #fff;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+      font-weight: 500;
+    }
+
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .order-row:last-child { border-bottom: none; }
+    .order-row .label { color: var(--text-muted); }
+    .order-row .value { font-weight: 600; }
+    .order-row .value.price { color: var(--orange); font-family: var(--serif); font-size: 15px; }
+
+    .success-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-outline-dark {
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text-main);
+      border-radius: 40px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: border-color 0.2s;
+    }
+    .btn-outline-dark:hover { border-color: var(--text-main); }
+
+    .btn-orange {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 40px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: background 0.2s;
+    }
+    .btn-orange:hover { background: var(--orange-light); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--dark);
+      padding: 56px 72px 28px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 44px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-brand .logo {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .footer-brand .logo::after { content: '·'; color: var(--orange); font-size: 20px; }
+
+    .footer-brand p { font-size: 12px; color: rgba(255,255,255,0.42); line-height: 2; max-width: 200px; }
+
+    .footer-col h4 { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 14px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { font-size: 12px; color: rgba(255,255,255,0.44); transition: color 0.2s; }
+    .footer-col ul li a:hover { color: rgba(255,255,255,0.78); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+    }
+    .footer-bottom p, .footer-bottom a { font-size: 11px; color: rgba(255,255,255,0.28); }
+    .footer-bottom a:hover { color: rgba(255,255,255,0.6); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .booking-body { grid-template-columns: 1fr; padding: 32px 16px 48px; }
+      .booking-body.single { grid-template-columns: 1fr; }
+      .step-line { width: 60px; }
+      footer { padding: 40px 24px 20px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+    }
+
+    @media (max-width: 560px) {
+      .nav-links { display: none; }
+      .session-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .cc-row { grid-template-columns: 1fr 1fr; }
+      .order-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">島嶼旅跡</div>
+    <ul class="nav-links">
+      <li><a href="#">探索體驗</a></li>
+      <li><a href="#">關於我們</a></li>
+      <li><a href="#">常見問題</a></li>
+      <li><a href="#">我的訂單</a></li>
+      <li><a href="#" class="nav-cta">登入／註冊</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==================== STEP 1 ==================== -->
+  <div id="page-step1" class="page active">
+
+    <!-- Stepper -->
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item active" id="s1-dot1">
+          <div class="step-circle">1</div>
+          <div class="step-label">選擇日期</div>
+        </div>
+        <div class="step-line" id="s1-line1"></div>
+        <div class="step-item" id="s1-dot2">
+          <div class="step-circle">2</div>
+          <div class="step-label">填寫資料</div>
+        </div>
+        <div class="step-line" id="s1-line2"></div>
+        <div class="step-item" id="s1-dot3">
+          <div class="step-circle">3</div>
+          <div class="step-label">預訂完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="booking-body single">
+      <div class="booking-card">
+
+        <!-- Calendar -->
+        <div class="calendar-header">
+          <button class="cal-nav" id="cal-prev">‹</button>
+          <div class="cal-month" id="cal-title"></div>
+          <button class="cal-nav" id="cal-next">›</button>
+        </div>
+
+        <div class="calendar-grid" id="cal-grid">
+          <div class="cal-dow">日</div>
+          <div class="cal-dow">一</div>
+          <div class="cal-dow">二</div>
+          <div class="cal-dow">三</div>
+          <div class="cal-dow">四</div>
+          <div class="cal-dow">五</div>
+          <div class="cal-dow">六</div>
+        </div>
+
+        <!-- Session -->
+        <div class="session-label">選擇場次</div>
+        <div class="session-grid">
+          <button class="session-btn" id="sess-am" onclick="selectSession('am')">
+            <div class="time">09:00</div>
+            <div class="tag"><span class="dot dot-am"></span>上午場</div>
+          </button>
+          <button class="session-btn" id="sess-pm" onclick="selectSession('pm')">
+            <div class="time">14:00</div>
+            <div class="tag"><span class="dot dot-pm"></span>下午場</div>
+          </button>
+        </div>
+
+        <button class="next-btn" id="step1-next" disabled onclick="goToStep2()">
+          下一步：填寫旅客資料 →
+        </button>
+
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-card" style="grid-row: 1; position: sticky; top: 80px;">
+        <h3>預訂摘要</h3>
+        <img class="summary-img"
+          src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=500&q=75"
+          alt="清水斷崖獨木舟探險" />
+        <div class="summary-name">清水斷崖獨木舟探險</div>
+        <div class="summary-row">
+          <span class="label">目的地</span>
+          <span class="value">花蓮</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">時間長度</span>
+          <span class="value">半天</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">選擇日期</span>
+          <span class="value pending" id="s1-date-disp">尚未選擇</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">選擇場次</span>
+          <span class="value pending" id="s1-sess-disp">尚未選擇</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">價格</span>
+          <span class="value price">NT$ 1,800 / 人</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 2 ==================== -->
+  <div id="page-step2" class="page">
+
+    <!-- Stepper -->
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item done">
+          <div class="step-circle">✓</div>
+          <div class="step-label">選擇日期</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item active">
+          <div class="step-circle">2</div>
+          <div class="step-label">填寫資料</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+          <div class="step-circle">3</div>
+          <div class="step-label">預訂完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="booking-body">
+
+      <div>
+        <!-- Contact -->
+        <div class="booking-card" style="margin-bottom: 20px;">
+          <div class="card-section-title"><span class="icon">👤</span> 聯絡人資料</div>
+
+          <div class="form-row">
+            <div class="form-group" id="fg-name">
+              <label>姓名 <span class="req">*</span></label>
+              <input class="form-input" type="text" id="inp-name" placeholder="請輸入真實姓名" />
+              <span class="error-msg">請填寫姓名</span>
+            </div>
+            <div class="form-group" id="fg-phone">
+              <label>手機號碼 <span class="req">*</span></label>
+              <input class="form-input" type="tel" id="inp-phone" placeholder="09XX-XXX-XXX" />
+              <span class="error-msg">請填寫有效手機號碼</span>
+            </div>
+          </div>
+
+          <div class="form-group" id="fg-email">
+            <label>電子信箱 <span class="req">*</span></label>
+            <input class="form-input" type="email" id="inp-email" placeholder="your@email.com" />
+            <span class="error-msg">請填寫有效電子信箱</span>
+          </div>
+
+          <div class="form-group">
+            <label>備註（選填）</label>
+            <textarea class="form-input" placeholder="有任何特殊需求或問題，請在此告知嚮導…"></textarea>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="booking-card">
+          <div class="card-section-title"><span class="icon">💳</span> 付款方式</div>
+
+          <div class="pay-options">
+            <div class="pay-option selected" id="pay-cc" onclick="selectPay('cc')">
+              <div class="pay-icon cc">VISA</div>
+              <div class="pay-info">
+                <div class="name">信用卡 / 金融卡</div>
+                <div class="sub">VISA · MasterCard · JCB</div>
+              </div>
+            </div>
+            <div class="pay-option" id="pay-line" onclick="selectPay('line')">
+              <div class="pay-icon line">L</div>
+              <div class="pay-info">
+                <div class="name">LINE Pay</div>
+                <div class="sub">快捷、安全的行動支付</div>
+              </div>
+            </div>
+            <div class="pay-option" id="pay-apple" onclick="selectPay('apple')">
+              <div class="pay-icon apple">🍎</div>
+              <div class="pay-info">
+                <div class="name">Apple Pay</div>
+                <div class="sub">Face ID / Touch ID 快速付款</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CC fields -->
+          <div id="cc-fields" class="show">
+            <div class="form-group" id="fg-ccnum">
+              <label>卡號 <span class="req">*</span></label>
+              <input class="form-input" type="text" id="inp-ccnum" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" />
+              <span class="error-msg">請填寫信用卡卡號</span>
+            </div>
+            <div class="cc-row">
+              <div class="form-group" id="fg-ccexp">
+                <label>有效期限 <span class="req">*</span></label>
+                <input class="form-input" type="text" id="inp-ccexp" placeholder="MM/YY" maxlength="5" />
+                <span class="error-msg">請填寫有效期限</span>
+              </div>
+              <div class="form-group" id="fg-cccvv">
+                <label>安全碼 <span class="req">*</span></label>
+                <input class="form-input" type="text" id="inp-cccvv" placeholder="CVV" maxlength="4" />
+                <span class="error-msg">請填寫安全碼</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="confirm-btn" id="confirm-btn" onclick="validateAndConfirm()">
+            確認預訂並付款 🔒
+          </button>
+          <p class="confirm-note">
+            點擊後即代表您同意我們的<a href="#">服務條款</a>與<a href="#">隱私政策</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Summary right col -->
+      <div class="summary-card" style="position: sticky; top: 80px;">
+        <h3>訂單摘要</h3>
+        <img class="summary-img"
+          src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=500&q=75"
+          alt="清水斷崖獨木舟探險" />
+        <div class="summary-name">清水斷崖獨木舟探險</div>
+        <div class="summary-row">
+          <span class="label">日期</span>
+          <span class="value" id="s2-date-disp">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">場次</span>
+          <span class="value" id="s2-sess-disp">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">人數</span>
+          <span class="value">1 人</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">總金額</span>
+          <span class="value price">NT$ 1,800</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== SUCCESS ==================== -->
+  <div id="page-success" class="page">
+    <!-- confetti bg -->
+    <div class="success-page">
+      <div class="confetti-wrap" id="confetti"></div>
+
+      <!-- stepper -->
+      <div class="success-stepper">
+        <div class="stepper">
+          <div class="step-item done">
+            <div class="step-circle">✓</div>
+            <div class="step-label">選擇日期</div>
+          </div>
+          <div class="step-line done"></div>
+          <div class="step-item done">
+            <div class="step-circle">✓</div>
+            <div class="step-label">填寫資料</div>
+          </div>
+          <div class="step-line done"></div>
+          <div class="step-item active">
+            <div class="step-circle">3</div>
+            <div class="step-label">預訂完成</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-inner">
+        <div class="check-icon">✓</div>
+        <h1 class="success-title">預訂成功！出發準備好了嗎？</h1>
+        <p class="success-sub">確認信已寄送至您的信箱，請記得在出發前查閱。</p>
+
+        <div class="order-card">
+          <div class="order-card-header">
+            <h4>訂單詳情</h4>
+            <span class="order-id">ITNQHTNFIA</span>
+          </div>
+          <div class="order-row">
+            <span class="label">體驗名稱</span>
+            <span class="value">清水斷崖獨木舟探險</span>
+          </div>
+          <div class="order-row">
+            <span class="label">目的地</span>
+            <span class="value">花蓮</span>
+          </div>
+          <div class="order-row">
+            <span class="label">體驗日期</span>
+            <span class="value" id="sc-date">—</span>
+          </div>
+          <div class="order-row">
+            <span class="label">場次</span>
+            <span class="value" id="sc-sess">—</span>
+          </div>
+          <div class="order-row">
+            <span class="label">聯絡人</span>
+            <span class="value" id="sc-name">旅客</span>
+          </div>
+          <div class="order-row">
+            <span class="label">已付總金額</span>
+            <span class="value price">NT$ 1,800</span>
+          </div>
+        </div>
+
+        <div class="success-actions">
+          <button class="btn-outline-dark" onclick="alert('返回首頁（待接入 index.html）')">← 返回首頁</button>
+          <button class="btn-orange" onclick="alert('查看我的訂單（待接入訂單頁）')">查看我的訂單</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">島嶼旅跡</div>
+        <p>深入台灣每一條小徑，<br>遇見最在地的感動體驗。<br>我們相信，旅行不只是到達目的地，<br>而是與這片土地真實相遇。</p>
+      </div>
+      <div class="footer-col">
+        <h4>探索</h4>
+        <ul>
+          <li><a href="#">所有體驗</a></li>
+          <li><a href="#">戶外冒險</a></li>
+          <li><a href="#">手作工藝</a></li>
+          <li><a href="#">美食料理</a></li>
+          <li><a href="#">文化歷史</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>公司</h4>
+        <ul>
+          <li><a href="#">關於我們</a></li>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">旅遊嚮導招募</a></li>
+          <li><a href="#">媒體合作</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>支援</h4>
+        <ul>
+          <li><a href="#">退款政策</a></li>
+          <li><a href="#">隱私政策</a></li>
+          <li><a href="#">服務條款</a></li>
+          <li><a href="#">查看訂單</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+      <a href="#">用心丈量台灣每一寸土地。</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ---- State ---- */
+    const state = {
+      selectedDate: null,   // Date object
+      selectedSession: null, // 'am' | 'pm'
+      payMethod: 'cc',
+      contactName: '',
+    };
+
+    /* ============ CALENDAR ============ */
+    let calYear, calMonth;
+
+    function initCalendar() {
+      const now = new Date();
+      calYear = now.getFullYear();
+      calMonth = now.getMonth();
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const months = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+      document.getElementById('cal-title').textContent = `${calYear} 年 ${months[calMonth]}`;
+
+      const grid = document.getElementById('cal-grid');
+      // remove old day cells (keep DOW headers = first 7 children)
+      while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+      const today = new Date(); today.setHours(0,0,0,0);
+      const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+      // empty cells
+      for (let i = 0; i < firstDay; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const el = document.createElement('div');
+        const date = new Date(calYear, calMonth, d);
+        date.setHours(0,0,0,0);
+        el.className = 'cal-day';
+        el.textContent = d;
+
+        if (date <= today) {
+          el.classList.add('disabled');
+        } else {
+          if (state.selectedDate && date.getTime() === state.selectedDate.getTime()) {
+            el.classList.add('selected');
+          }
+          if (date.getTime() === today.getTime()) el.classList.add('today');
+          el.addEventListener('click', () => selectDate(date));
+        }
+        grid.appendChild(el);
+      }
+    }
+
+    document.getElementById('cal-prev').addEventListener('click', () => {
+      calMonth--;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      renderCalendar();
+    });
+
+    document.getElementById('cal-next').addEventListener('click', () => {
+      calMonth++;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderCalendar();
+    });
+
+    function selectDate(date) {
+      state.selectedDate = date;
+      renderCalendar();
+      const d = date;
+      const str = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
+      document.getElementById('s1-date-disp').textContent = str;
+      document.getElementById('s1-date-disp').style.color = 'var(--text-main)';
+      checkStep1();
+    }
+
+    /* ---- Session ---- */
+    function selectSession(s) {
+      state.selectedSession = s;
+      document.getElementById('sess-am').classList.toggle('selected', s === 'am');
+      document.getElementById('sess-pm').classList.toggle('selected', s === 'pm');
+      const label = s === 'am' ? '09:00 上午場' : '14:00 下午場';
+      document.getElementById('s1-sess-disp').textContent = label;
+      document.getElementById('s1-sess-disp').style.color = 'var(--text-main)';
+      checkStep1();
+    }
+
+    function checkStep1() {
+      const ok = state.selectedDate && state.selectedSession;
+      document.getElementById('step1-next').disabled = !ok;
+    }
+
+    /* ---- Go to Step 2 ---- */
+    function goToStep2() {
+      // propagate values to step2 summary
+      const d = state.selectedDate;
+      const dateStr = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
+      const sessStr = state.selectedSession === 'am' ? '09:00 上午場' : '14:00 下午場';
+      document.getElementById('s2-date-disp').textContent = dateStr;
+      document.getElementById('s2-sess-disp').textContent = sessStr;
+
+      showPage('page-step2');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ============ PAYMENT ============ */
+    function selectPay(method) {
+      state.payMethod = method;
+      ['cc','line','apple'].forEach(m => {
+        document.getElementById('pay-' + m).classList.toggle('selected', m === method);
+      });
+      const ccFields = document.getElementById('cc-fields');
+      ccFields.classList.toggle('show', method === 'cc');
+    }
+
+    /* Card number formatting */
+    document.getElementById('inp-ccnum').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').slice(0,16);
+      this.value = v.replace(/(.{4})/g,'$1 ').trim();
+    });
+
+    /* Expiry formatting */
+    document.getElementById('inp-ccexp').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').slice(0,4);
+      if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+      this.value = v;
+    });
+
+    /* ---- Validate & Confirm ---- */
+    function validateAndConfirm() {
+      let valid = true;
+
+      function check(fgId, inputId, testFn) {
+        const fg = document.getElementById(fgId);
+        const val = document.getElementById(inputId).value.trim();
+        if (!testFn(val)) {
+          fg.classList.add('has-error');
+          document.getElementById(inputId).classList.add('error');
+          valid = false;
+        } else {
+          fg.classList.remove('has-error');
+          document.getElementById(inputId).classList.remove('error');
+        }
+        return val;
+      }
+
+      const name = check('fg-name', 'inp-name', v => v.length >= 2);
+      check('fg-phone', 'inp-phone', v => /^09\d{2}[\s-]?\d{3}[\s-]?\d{3}$/.test(v.replace(/\s/g,'')));
+      check('fg-email', 'inp-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+
+      if (state.payMethod === 'cc') {
+        check('fg-ccnum', 'inp-ccnum', v => v.replace(/\s/g,'').length === 16);
+        check('fg-ccexp', 'inp-ccexp', v => /^\d{2}\/\d{2}$/.test(v));
+        check('fg-cccvv', 'inp-cccvv', v => /^\d{3,4}$/.test(v));
+      }
+
+      if (!valid) return;
+
+      // populate success page
+      state.contactName = name;
+      const d = state.selectedDate;
+      const dateStr = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
+      const sessStr = state.selectedSession === 'am' ? '09:00 上午場' : '14:00 下午場';
+      document.getElementById('sc-date').textContent = dateStr;
+      document.getElementById('sc-sess').textContent = sessStr;
+      document.getElementById('sc-name').textContent = name;
+
+      showPage('page-success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      spawnConfetti();
+    }
+
+    /* ============ PAGE NAV ============ */
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    /* ============ CONFETTI ============ */
+    function spawnConfetti() {
+      const wrap = document.getElementById('confetti');
+      wrap.innerHTML = '';
+      const colors = ['#E8633A','#F5A623','#3BAA6E','#4A90D9','#9B59B6','#E74C3C','#2ECC71','#F39C12'];
+      for (let i = 0; i < 80; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 100 + '%';
+        el.style.top = '-10px';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.width = (Math.random() * 8 + 5) + 'px';
+        el.style.height = (Math.random() * 8 + 5) + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
+        el.style.animationDelay = (Math.random() * 2) + 's';
+        wrap.appendChild(el);
+      }
+    }
+
+    /* ---- Init ---- */
+    initCalendar();
+
+    // make step1 layout two-column
+    document.querySelector('#page-step1 .booking-body').classList.remove('single');
+  </script>
+
+</body>
+</html>
