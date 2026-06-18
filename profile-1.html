@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的帳號 — 島嶼旅跡 IslandTrace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8633A;
+      --orange-light: #F07A54;
+      --dark: #1A1A2E;
+      --navy: #16213E;
+      --cream: #F5F0EB;
+      --warm-white: #FAF8F5;
+      --text-main: #2C2C2C;
+      --text-muted: #888;
+      --border: #E0DAD3;
+      --red: #E63329;
+      --red-light: #fef0ef;
+      --green: #3DAA6E;
+      --green-light: #edf7f2;
+      --serif: 'Noto Serif TC', serif;
+      --sans: 'Noto Sans TC', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-main);
+      background: var(--warm-white);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      background: rgba(20, 20, 35, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-logo .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: inline-block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; }
+
+    /* ===================== PROFILE LAYOUT ===================== */
+    .profile-page {
+      padding-top: 60px;
+      min-height: 100vh;
+      background: var(--warm-white);
+    }
+
+    .profile-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 32px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ===================== SIDEBAR ===================== */
+    .sidebar {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .profile-card {
+      padding: 32px 20px 24px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+
+    .avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.14);
+    }
+
+    .avatar-edit {
+      position: absolute;
+      bottom: 2px; right: 2px;
+      width: 22px; height: 22px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 10px;
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    .profile-name {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .profile-email {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .member-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fff9f0;
+      border: 1.5px solid #f5d89e;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #b07d1a;
+    }
+
+    .member-badge .star { font-size: 12px; }
+
+    /* Sidebar menu */
+    .sidebar-menu { padding: 8px 0; }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 20px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .menu-item:hover {
+      background: var(--warm-white);
+      color: var(--orange);
+    }
+
+    .menu-item.active {
+      background: #fef4f0;
+      color: var(--orange);
+      font-weight: 500;
+      border-left-color: var(--orange);
+    }
+
+    .menu-item .menu-icon {
+      font-size: 15px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .menu-item.logout {
+      color: var(--text-muted);
+      margin-top: 4px;
+      border-top: 1px solid var(--border);
+    }
+    .menu-item.logout:hover { color: var(--red); background: #fff5f5; }
+
+    /* ===================== MAIN CONTENT ===================== */
+    .main-content { min-width: 0; }
+
+    .content-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+
+    /* ===================== ORDER TABLE ===================== */
+    .order-table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .order-table-head {
+      display: grid;
+      grid-template-columns: 2.8fr 1.4fr 1.2fr 1fr 1.2fr;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .order-row {
+      display: grid;
+      grid-template-columns: 2.8fr 1.4fr 1.2fr 1fr 1.2fr;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .order-row:last-child { border-bottom: none; }
+    .order-row:hover { background: #fafaf9; }
+
+    /* Experience cell */
+    .order-exp {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .order-exp-img {
+      width: 52px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #e8e2db;
+    }
+
+    .order-exp-info { min-width: 0; }
+
+    .order-exp-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 3px;
+    }
+
+    .order-exp-location {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .location-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+
+    /* Date cell */
+    .order-date {
+      font-size: 12px;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* Price cell */
+    .order-price {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--orange);
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .status-badge.upcoming {
+      background: var(--red-light);
+      color: var(--red);
+      border: 1px solid #f5c0bc;
+    }
+
+    .status-badge.completed {
+      background: var(--green-light);
+      color: var(--green);
+      border: 1px solid #b8e4cc;
+    }
+
+    /* Cancel button */
+    .btn-cancel {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--orange);
+      background: #fff;
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--sans);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
+    }
+
+    .btn-cancel:hover {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: var(--dark);
+      padding: 60px 72px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-brand .logo {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .footer-brand .logo .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: inline-block;
+    }
+
+    .footer-brand p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.48);
+      line-height: 1.9;
+      max-width: 220px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-col ul { list-style: none; }
+
+    .footer-col ul li { margin-bottom: 10px; }
+
+    .footer-col ul li a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.48);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: rgba(255,255,255,0.82); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+    }
+
+    .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .footer-bottom a { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .footer-bottom a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      nav { padding: 0 28px; }
+      .profile-container { padding: 32px 24px; gap: 20px; }
+      footer { padding: 48px 36px 24px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .profile-container {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+      }
+      .order-table-head { display: none; }
+      .order-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      footer { padding: 40px 20px 20px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== NAV ===================== -->
+  <nav>
+    <div class="nav-logo">島嶼旅跡</div>
+    <ul class="nav-links">
+      <li><a href="#">探索體驗</a></li>
+      <li><a href="#">關於我們</a></li>
+      <li><a href="#">發現周邊</a></li>
+      <li><a href="#">我的訂單</a></li>
+      <li><a href="#" class="nav-cta">登入／註冊</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===================== PROFILE PAGE ===================== -->
+  <div class="profile-page">
+    <div class="profile-container">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="profile-card">
+          <div class="avatar-wrap">
+            <img class="avatar"
+              src="https://i.pravatar.cc/150?img=47"
+              alt="旅遊達人" />
+            <div class="avatar-edit">✎</div>
+          </div>
+          <div class="profile-name">旅遊達人</div>
+          <div class="profile-email">demo@islandtrace.tw</div>
+          <div class="member-badge">
+            <span class="star">★</span> 探險會員
+          </div>
+        </div>
+
+        <div class="sidebar-menu">
+          <div class="menu-item active" onclick="switchTab('orders')">
+            <span class="menu-icon">📋</span>
+            訂單紀錄
+          </div>
+          <div class="menu-item" onclick="switchTab('favorites')">
+            <span class="menu-icon">❤️</span>
+            我的收藏
+          </div>
+          <div class="menu-item" onclick="switchTab('profile')">
+            <span class="menu-icon">👤</span>
+            個人資料
+          </div>
+          <div class="menu-item logout" onclick="handleLogout()">
+            <span class="menu-icon">🚪</span>
+            登出
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="main-content">
+
+        <!-- Orders Panel -->
+        <div id="panel-orders">
+          <div class="content-title">訂單紀錄</div>
+          <div class="order-table-wrap">
+
+            <!-- Table header -->
+            <div class="order-table-head">
+              <div>體驗</div>
+              <div>日期 / 場次</div>
+              <div>金額</div>
+              <div>狀態</div>
+              <div></div>
+            </div>
+
+            <!-- Row 1 -->
+            <div class="order-row">
+              <div class="order-exp">
+                <img class="order-exp-img"
+                  src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=200&q=75"
+                  alt="清水斷崖獨木舟探陰" />
+                <div class="order-exp-info">
+                  <div class="order-exp-name">清水斷崖獨木舟探險</div>
+                  <div class="order-exp-location">
+                    <span class="location-dot"></span>
+                    花蓮
+                  </div>
+                </div>
+              </div>
+              <div class="order-date">
+                2025/7/15<br>
+                上午場 09:00
+              </div>
+              <div class="order-price">NT$1,800</div>
+              <div>
+                <span class="status-badge upcoming">未出發</span>
+              </div>
+              <div>
+                <button class="btn-cancel" onclick="cancelOrder(this)">取消訂單</button>
+              </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="order-row">
+              <div class="order-exp">
+                <img class="order-exp-img"
+                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=200&q=75"
+                  alt="淡水老街藍染拼布工作坊" />
+                <div class="order-exp-info">
+                  <div class="order-exp-name">淡水老街藍染拼布工作坊</div>
+                  <div class="order-exp-location">
+                    <span class="location-dot"></span>
+                    新北
+                  </div>
+                </div>
+              </div>
+              <div class="order-date">
+                2025/5/20<br>
+                下午場 14:00
+              </div>
+              <div class="order-price">NT$1,200</div>
+              <div>
+                <span class="status-badge completed">已完成</span>
+              </div>
+              <div></div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="order-row">
+              <div class="order-exp">
+                <img class="order-exp-img"
+                  src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=200&q=75"
+                  alt="九份老街手作陶藝體驗" />
+                <div class="order-exp-info">
+                  <div class="order-exp-name">九份老街手作陶藝體驗</div>
+                  <div class="order-exp-location">
+                    <span class="location-dot"></span>
+                    新北
+                  </div>
+                </div>
+              </div>
+              <div class="order-date">
+                2025/4/12<br>
+                上午場 10:00
+              </div>
+              <div class="order-price">NT$980</div>
+              <div>
+                <span class="status-badge completed">已完成</span>
+              </div>
+              <div></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Favorites Panel (hidden) -->
+        <div id="panel-favorites" style="display:none;">
+          <div class="content-title">我的收藏</div>
+          <div style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:60px; text-align:center; color:var(--text-muted);">
+            <div style="font-size:36px; margin-bottom:14px;">❤️</div>
+            <div style="font-size:14px;">還沒有收藏的體驗</div>
+            <div style="font-size:12px; margin-top:6px;">去探索你喜歡的體驗，點擊心型圖示即可收藏</div>
+          </div>
+        </div>
+
+        <!-- Profile Panel (hidden) -->
+        <div id="panel-profile" style="display:none;">
+          <div class="content-title">個人資料</div>
+          <div style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:32px; display:flex; flex-direction:column; gap:20px;">
+
+            <div>
+              <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">姓名</label>
+              <input value="旅遊達人" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:var(--sans); outline:none; transition:border-color .2s;"
+                onfocus="this.style.borderColor='var(--orange)'"
+                onblur="this.style.borderColor='var(--border)'" />
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">電子信箱</label>
+              <input value="demo@islandtrace.tw" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:var(--sans); outline:none; transition:border-color .2s;"
+                onfocus="this.style.borderColor='var(--orange)'"
+                onblur="this.style.borderColor='var(--border)'" />
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">手機號碼</label>
+              <input placeholder="請輸入手機號碼" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:var(--sans); outline:none; transition:border-color .2s;"
+                onfocus="this.style.borderColor='var(--orange)'"
+                onblur="this.style.borderColor='var(--border)'" />
+            </div>
+
+            <button onclick="saveProfile()" style="align-self:flex-start; background:var(--orange); color:#fff; border:none; border-radius:24px; padding:11px 28px; font-size:14px; font-weight:500; font-family:var(--sans); cursor:pointer; transition:background .2s;"
+              onmouseover="this.style.background='var(--orange-light)'"
+              onmouseout="this.style.background='var(--orange)'">
+              儲存變更
+            </button>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          島嶼旅跡
+          <span class="dot"></span>
+        </div>
+        <p>深入台灣每一個小鎮，<br>感受在地的真實故事。<br>跟著在地嚮導，<br>與那片土地上真實相遇。</p>
+      </div>
+      <div class="footer-col">
+        <h4>探索</h4>
+        <ul>
+          <li><a href="#">所有體驗</a></li>
+          <li><a href="#">戶外冒險</a></li>
+          <li><a href="#">手作工藝</a></li>
+          <li><a href="#">美食料理</a></li>
+          <li><a href="#">文化歷史</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>公司</h4>
+        <ul>
+          <li><a href="#">關於我們</a></li>
+          <li><a href="#">常見問答</a></li>
+          <li><a href="#">旅遊嚮導招募</a></li>
+          <li><a href="#">媒體合作</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>支援</h4>
+        <ul>
+          <li><a href="#">退換政策</a></li>
+          <li><a href="#">隱私政策</a></li>
+          <li><a href="#">服務條款</a></li>
+          <li><a href="#">查看訂單</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+      <a href="#">用心定量台灣一寸土地</a>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(tab) {
+      // Hide all panels
+      document.getElementById('panel-orders').style.display = 'none';
+      document.getElementById('panel-favorites').style.display = 'none';
+      document.getElementById('panel-profile').style.display = 'none';
+
+      // Remove active from all menu items
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+
+      // Show target panel
+      document.getElementById('panel-' + tab).style.display = '';
+
+      // Set active menu item
+      const items = document.querySelectorAll('.menu-item:not(.logout)');
+      const tabMap = { orders: 0, favorites: 1, profile: 2 };
+      if (tabMap[tab] !== undefined) {
+        items[tabMap[tab]].classList.add('active');
+      }
+    }
+
+    function cancelOrder(btn) {
+      const row = btn.closest('.order-row');
+      const name = row.querySelector('.order-exp-name').textContent;
+      if (confirm(`確定要取消「${name}」的訂單嗎？`)) {
+        const badge = row.querySelector('.status-badge');
+        badge.textContent = '已取消';
+        badge.className = 'status-badge';
+        badge.style.cssText = 'background:#f5f5f5; color:#999; border:1px solid #e0e0e0;';
+        btn.remove();
+      }
+    }
+
+    function saveProfile() {
+      const btn = event.currentTarget;
+      btn.textContent = '✓ 已儲存';
+      btn.style.background = '#3DAA6E';
+      setTimeout(() => {
+        btn.textContent = '儲存變更';
+        btn.style.background = 'var(--orange)';
+      }, 2000);
+    }
+
+    function handleLogout() {
+      if (confirm('確定要登出嗎？')) {
+        alert('已成功登出！');
+      }
+    }
+  </script>
+
+</body>
+</html>
