@@ -6,10 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的訂單｜島嶼旅跡</title>
 
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@700&display=swap"
+        rel="stylesheet">
+
     <style>
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -18,289 +24,697 @@
 
         :root {
             --orange: #E8633A;
+            --orange-light: #F07A54;
             --navy: #16213E;
-            --cream: #F8F5F2;
-            --border: #E6DED7;
+            --cream: #F7F3EE;
+            --border: #E5DDD5;
             --text: #2C2C2C;
             --muted: #888;
+            --green: #6FA784;
+
+            --serif: 'Noto Serif TC', serif;
+            --sans: 'Noto Sans TC', sans-serif;
         }
 
         body {
-            font-family: "Noto Sans TC", sans-serif;
-            background: #FAFAFA;
+            font-family: var(--sans);
             color: var(--text);
+            background: #F5F5F5;
         }
 
-        /* 主區塊 */
-        .order-wrapper {
-            max-width: 1200px;
-            margin: 120px auto 80px;
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ================= NAV ================= */
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 60px;
+
+            background: rgba(22, 33, 62, .95);
+
             display: flex;
-            gap: 40px;
-            padding: 0 40px;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 0 48px;
+
+            z-index: 1000;
         }
 
-        /* 左側 */
-        .sidebar {
-            width: 260px;
-        }
-
-        /* 會員卡 */
-        .member-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .05);
-        }
-
-        .member-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 4px solid var(--orange);
-            margin: 0 auto 15px;
-            overflow: hidden;
-        }
-
-        .member-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .member-name {
-            font-size: 22px;
+        .nav-logo {
+            color: white;
+            font-family: var(--serif);
             font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 18px;
         }
 
-        .member-mail {
-            color: var(--muted);
-            margin-bottom: 15px;
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
         }
 
-        .member-tag {
-            display: inline-block;
-            background: #EDF7EF;
-            color: #3E8D55;
-            padding: 6px 14px;
-            border-radius: 20px;
+        .nav-links a {
+            color: rgba(255, 255, 255, .8);
             font-size: 14px;
         }
 
-        /* 左側選單 */
-        .side-menu {
-            margin-top: 25px;
-            background: #fff;
-            border-radius: 18px;
-            padding: 15px;
+        .nav-links a:hover {
+            color: white;
         }
 
-        .menu-item {
-            padding: 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 8px;
-            transition: .3s;
+        .nav-btn {
+            background: var(--orange);
+            padding: 8px 18px;
+            border-radius: 20px;
+            color: white !important;
         }
 
-        .menu-item:hover {
-            background: #F7F1ED;
+        /* ================= 主內容 ================= */
+
+        .member-wrapper {
+
+            max-width: 1200px;
+
+            margin: 120px auto 80px;
+
+            display: flex;
+
+            gap: 40px;
+
+            padding: 0 32px;
         }
 
-        .menu-item.active {
-            background: #FCEFE9;
+        /* ================= 左側會員 ================= */
+
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        .profile-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 32px 24px;
+
+            text-align: center;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+        }
+
+        .profile-avatar {
+
+            width: 90px;
+            height: 90px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 4px solid var(--orange);
+
+            margin-bottom: 18px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .profile-email {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .member-badge {
+            display: inline-block;
+
+            background: #EDF7F0;
+
+            color: var(--green);
+
+            padding: 8px 16px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* 選單 */
+
+        .menu {
+            margin-top: 24px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+        }
+
+        .menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 18px 20px;
+
+            border-bottom: 1px solid #eee;
+
+            transition: .2s;
+        }
+
+        .menu a:hover {
+            background: #FFF3EE;
+        }
+
+        .menu a.active {
+            background: #FFF3EE;
             color: var(--orange);
             font-weight: 700;
         }
 
-        /* 右側 */
-        .order-content {
+        .menu a:last-child {
+            border-bottom: none;
+        }
+
+        /* ================= 右側訂單 ================= */
+
+        .content {
             flex: 1;
-            background: #fff;
+        }
+
+        .content-card {
+
+            background: white;
+
             border-radius: 20px;
-            padding: 35px;
+
+            padding: 36px;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
         }
 
-        .order-title {
+        .content-title {
+
             font-size: 32px;
-            margin-bottom: 30px;
+
+            font-family: var(--serif);
+
+            margin-bottom: 32px;
         }
 
-        /* 表頭 */
-        .order-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 120px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-            color: var(--muted);
-        }
+        /* 表格 */
 
-        /* 訂單卡 */
+        .table-header,
         .order-item {
+
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+
+            grid-template-columns:
+                3fr 1.2fr 1fr 1fr 1fr;
+
             align-items: center;
-            padding: 25px 0;
-            border-bottom: 1px solid var(--border);
+
+            gap: 20px;
         }
 
-        .order-product {
+        .table-header {
+
+            padding-bottom: 16px;
+
+            border-bottom: 1px solid #ddd;
+
+            color: var(--muted);
+
+            font-size: 14px;
+        }
+
+        .order-item {
+
+            padding: 28px 0;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-info {
             display: flex;
-            gap: 15px;
+            gap: 16px;
             align-items: center;
         }
 
-        .order-product img {
-            width: 70px;
+        .order-info img {
+
+            width: 90px;
             height: 70px;
-            border-radius: 10px;
+
+            border-radius: 12px;
+
             object-fit: cover;
         }
 
-        .order-name {
+        .order-title {
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .order-location {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--muted);
         }
 
         .price {
             color: var(--orange);
             font-weight: 700;
+            line-height: 1.5;
         }
+
+        /* 狀態 */
 
         .status {
+
             display: inline-block;
-            padding: 8px 14px;
+
+            padding: 10px 16px;
+
             border-radius: 20px;
-            font-size: 14px;
+
+            font-size: 13px;
+
+            font-weight: 700;
         }
 
-        .pending {
-            background: #FFF2EB;
+        .status.pending {
+            background: #FFF1EC;
             color: var(--orange);
         }
 
-        .done {
-            background: #EAF8EE;
-            color: #3E8D55;
+        .status.complete {
+            background: #EDF7F0;
+            color: var(--green);
         }
+
+        /* 按鈕 */
 
         .cancel-btn {
-            border: 1px solid var(--orange);
+
+            border: 1.5px solid var(--orange);
+
             background: white;
+
             color: var(--orange);
-            padding: 10px 15px;
-            border-radius: 30px;
+
+            padding: 10px 18px;
+
+            border-radius: 20px;
+
             cursor: pointer;
+
+            transition: .2s;
         }
 
         .cancel-btn:hover {
             background: var(--orange);
             color: white;
         }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            background: var(--navy);
+
+            color: rgba(255, 255, 255, .7);
+
+            padding: 64px 48px 20px;
+        }
+
+        .footer-grid {
+
+            display: grid;
+
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+
+            gap: 48px;
+
+            padding-bottom: 40px;
+        }
+
+        .footer-logo {
+
+            color: white;
+
+            font-family: var(--serif);
+
+            font-size: 24px;
+
+            margin-bottom: 16px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 18px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+
+        .footer-bottom {
+
+            border-top: 1px solid rgba(255, 255, 255, .1);
+
+            margin-top: 40px;
+
+            padding-top: 20px;
+
+            display: flex;
+            justify-content: space-between;
+
+            font-size: 13px;
+        }
+
+        /* ================= RWD ================= */
+
+        @media(max-width:900px) {
+
+            .member-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .table-header {
+                display: none;
+            }
+
+            .order-item {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="order-wrapper">
+    <!-- ================= NAV ================= -->
+
+    <nav>
+
+        <a href="#" class="nav-logo">島嶼旅跡 ·</a>
+
+        <ul class="nav-links">
+            <li><a href="#">探索體驗</a></li>
+            <li><a href="#">關於我們</a></li>
+            <li><a href="#">常見問題</a></li>
+            <li><a href="#">我的訂單</a></li>
+            <li><a href="#" class="nav-btn">登入 / 註冊</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- ================= 主內容 ================= -->
+
+    <div class="member-wrapper">
 
         <!-- 左側 -->
         <aside class="sidebar">
 
-            <div class="member-card">
-                <div class="member-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" alt="">
+            <div class="profile-card">
+
+                <img class="profile-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300"
+                    alt="會員">
+
+                <div class="profile-name">旅遊達人</div>
+
+                <div class="profile-email">
+                    demo@islandtrace.tw
                 </div>
-                <div class="member-name">旅遊達人</div>
-                <div class="member-mail">demo@islandtrace.tw</div>
-                <div class="member-tag">探索會員</div>
+
+                <div class="member-badge">
+                    ✨ 探險會員
+                </div>
+
             </div>
 
-            <div class="side-menu">
-                <div class="menu-item active">📋 訂單紀錄</div>
-                <div class="menu-item">❤️ 我的收藏</div>
-                <div class="menu-item">👤 個人資料</div>
-                <div class="menu-item">🚪 登出</div>
+            <!-- 選單 -->
+
+            <div class="menu">
+
+                <a href="#" class="active">
+                    📄 訂單紀錄
+                </a>
+
+                <a href="#">
+                    ❤️ 我的收藏
+                </a>
+
+                <a href="#">
+                    👤 個人資料
+                </a>
+
+                <a href="#">
+                    🚪 登出
+                </a>
+
             </div>
 
         </aside>
 
         <!-- 右側 -->
-        <main class="order-content">
 
-            <h1 class="order-title">訂單紀錄</h1>
+        <main class="content">
 
-            <div class="order-header">
-                <div>體驗</div>
-                <div>日期 / 場次</div>
-                <div>金額</div>
-                <div>狀態</div>
-                <div></div>
-            </div>
+            <div class="content-card">
 
-            <div class="order-item">
-                <div class="order-product">
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300">
-                    <div>
-                        <div class="order-name">清水斷崖獨木舟探險</div>
-                        <div class="order-location">📍 花蓮</div>
-                    </div>
+                <h1 class="content-title">
+                    訂單紀錄
+                </h1>
+
+                <!-- 表頭 -->
+
+                <div class="table-header">
+
+                    <div>體驗</div>
+                    <div>日期 / 場次</div>
+                    <div>金額</div>
+                    <div>狀態</div>
+                    <div></div>
+
                 </div>
-                <div>2025/7/15<br>上午場 09:00</div>
-                <div class="price">NT$ 1,800</div>
-                <div><span class="status pending">未出發</span></div>
-                <div><button class="cancel-btn">取消訂單</button></div>
-            </div>
 
-            <div class="order-item">
-                <div class="order-product">
-                    <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=300">
-                    <div>
-                        <div class="order-name">淡水老街藍染拼布工作坊</div>
-                        <div class="order-location">📍 新北</div>
+                <!-- 訂單 1 -->
+
+                <div class="order-item">
+
+                    <div class="order-info">
+
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400">
+
+                        <div>
+
+                            <div class="order-title">
+                                清水斷崖獨木舟探險
+                            </div>
+
+                            <div class="order-location">
+                                📍 花蓮
+                            </div>
+
+                        </div>
+
                     </div>
+
+                    <div>
+                        2025/7/15<br>
+                        上午場 09:00
+                    </div>
+
+                    <div class="price">
+                        NT$ 1,800
+                    </div>
+
+                    <div>
+                        <span class="status pending">
+                            未出發
+                        </span>
+                    </div>
+
+                    <div>
+                        <button class="cancel-btn">
+                            取消訂單
+                        </button>
+                    </div>
+
                 </div>
-                <div>2025/5/20<br>下午場 14:00</div>
-                <div class="price">NT$ 1,200</div>
-                <div><span class="status done">已完成</span></div>
-                <div></div>
+
+                <!-- 訂單 2 -->
+
+                <div class="order-item">
+
+                    <div class="order-info">
+
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=400">
+
+                        <div>
+
+                            <div class="order-title">
+                                淡水老街藍染拼布工作坊
+                            </div>
+
+                            <div class="order-location">
+                                📍 新北
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div>
+                        2025/5/20<br>
+                        下午場 14:00
+                    </div>
+
+                    <div class="price">
+                        NT$ 1,200
+                    </div>
+
+                    <div>
+                        <span class="status complete">
+                            已完成
+                        </span>
+                    </div>
+
+                    <div></div>
+
+                </div>
+
             </div>
 
         </main>
 
     </div>
 
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-grid">
+
+            <div>
+
+                <div class="footer-logo">
+                    島嶼旅跡
+                </div>
+
+                <p>
+                    深入台灣每一個小鎮，<br>
+                    遇見最在地的感動體驗。
+                </p>
+
+            </div>
+
+            <div class="footer-col">
+
+                <h4>探索</h4>
+
+                <ul>
+                    <li><a href="#">所有體驗</a></li>
+                    <li><a href="#">戶外冒險</a></li>
+                    <li><a href="#">手作工藝</a></li>
+                </ul>
+
+            </div>
+
+            <div class="footer-col">
+
+                <h4>公司</h4>
+
+                <ul>
+                    <li><a href="#">關於我們</a></li>
+                    <li><a href="#">常見問題</a></li>
+                </ul>
+
+            </div>
+
+            <div class="footer-col">
+
+                <h4>支援</h4>
+
+                <ul>
+                    <li><a href="#">退換政策</a></li>
+                    <li><a href="#">隱私政策</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2025 島嶼旅跡 IslandTrace.
+            </p>
+
+            <p>
+                用心丈量台灣每一寸土地
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- ================= JS ================= -->
+
     <script>
 
-        // 左側選單切換
-        const menuItems = document.querySelectorAll(".menu-item");
-
-        menuItems.forEach(item => {
-            item.addEventListener("click", function () {
-                menuItems.forEach(i => i.classList.remove("active"));
-                this.classList.add("active");
-            });
-        });
-
-        // 取消訂單
-        const cancelBtns = document.querySelectorAll(".cancel-btn");
+        // 找到所有取消按鈕
+        const cancelBtns = document.querySelectorAll('.cancel-btn');
 
         cancelBtns.forEach(btn => {
-            btn.addEventListener("click", function () {
-                const confirmCancel = confirm("確定要取消這筆訂單嗎？");
+
+            btn.addEventListener('click', function () {
+
+                const confirmCancel = confirm('確定要取消這筆訂單嗎？');
 
                 if (confirmCancel) {
-                    alert("訂單已取消");
-                    this.closest(".order-item").remove();
+
+                    alert('訂單已取消');
+
+                    // 找到整張訂單卡片
+                    const orderItem = this.closest('.order-item');
+
+                    // 淡出效果
+                    orderItem.style.opacity = '0.5';
                 }
+
             });
+
         });
 
     </script>
