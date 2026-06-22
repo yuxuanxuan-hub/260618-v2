@@ -1076,13 +1076,22 @@
       </h1>
       <p class="hero-sub">超過 200 個在地嚮導帶路的深度體驗，從山頂到海岸，從廟房到工坊，找到屬於你的那一場旅途。</p>
       <div class="hero-search">
-        <select>
-          <option>← 選擇目的地</option>
-          <option>台北</option><option>台南</option><option>花蓮</option><option>台東</option>
+        <select id="hero-dest-select">
+          <option value="">← 選擇目的地</option>
+          <option value="台北">台北</option>
+          <option value="新北">新北</option>
+          <option value="台中">台中</option>
+          <option value="台南">台南</option>
+          <option value="高雄">高雄</option>
+          <option value="宜蘭">宜蘭</option>
+          <option value="花蓮">花蓮</option>
+          <option value="嘉義">嘉義</option>
+          <option value="屏東">屏東</option>
+          <option value="彰化">彰化</option>
         </select>
         <div class="divider" style="width:1px;height:22px;background:var(--border);flex-shrink:0;"></div>
         <input type="date" />
-        <button onclick="App.go('products')">搜尋體驗</button>
+        <button onclick="heroSearch()">搜尋體驗</button>
       </div>
     </div>
   </section>
@@ -1201,9 +1210,9 @@
       <div class="filter-section">
         <div class="filter-section-title">價格範圍（NT$）</div>
         <div class="price-range">
-          <input class="price-input" type="number" placeholder="最低" id="price-min" />
+          <input class="price-input" type="number" placeholder="最低" id="price-min" min="0" oninput="_renderFilteredCards()" />
           <span class="price-sep">—</span>
-          <input class="price-input" type="number" placeholder="最高" id="price-max" />
+          <input class="price-input" type="number" placeholder="最高" id="price-max" min="0" oninput="_renderFilteredCards()" />
         </div>
       </div>
     </aside>
@@ -1594,7 +1603,7 @@
       <!-- Orders Panel -->
       <div id="panel-orders">
         <div class="content-title">訂單紀錄</div>
-        <div class="order-table-wrap">
+        <div class="order-table-wrap" id="order-table-wrap-dynamic">
           <div class="order-table-head"><div>體驗</div><div>日期 / 場次</div><div>金額</div><div>狀態</div><div></div></div>
           <div class="order-row-p">
             <div class="order-exp"><img class="order-exp-img" src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=200&q=75" alt=""/><div><div class="order-exp-name">清水斷崖獨木舟探險</div><div class="order-exp-location"><span class="location-dot"></span>花蓮</div></div></div>
@@ -1812,10 +1821,19 @@ const App = {
 
     // View-specific init
     if (viewId === 'index') { renderIndexCards(); }
-    if (viewId === 'products') { renderProductCards(opts); }
+    if (viewId === 'products') {
+      // Reset filters on fresh navigation (opts will re-apply as needed)
+      activeFilters = { regions: [], themes: [], times: [] };
+      document.querySelectorAll('.tag-btn.active').forEach(b => b.classList.remove('active'));
+      const pmin = document.getElementById('price-min');
+      const pmax = document.getElementById('price-max');
+      if (pmin) pmin.value = '';
+      if (pmax) pmax.value = '';
+      renderProductCards(opts);
+    }
     if (viewId === 'product-detail') { loadProductDetail(opts); }
     if (viewId === 'booking') { bkInit(); }
-    if (viewId === 'profile-1') { renderFavorites(); }
+    if (viewId === 'profile-1') { renderFavorites(); renderOrders(); }
   },
 
   toggleFav(expId, btn) {
@@ -1878,6 +1896,10 @@ function renderIndexCards() {
 let activeFilters = { regions: [], themes: [], times: [] };
 
 function renderProductCards(opts = {}) {
+  // Reset price inputs on fresh load
+  const pmin = document.getElementById('price-min');
+  const pmax = document.getElementById('price-max');
+
   // Apply theme from opts (e.g. from footer/nav click)
   if (opts.theme) {
     // Activate matching theme button
@@ -1890,16 +1912,34 @@ function renderProductCards(opts = {}) {
       });
       _renderFilteredCards();
     }, 0);
+  } else if (opts.region) {
+    // Activate matching region button from hero search
+    setTimeout(() => {
+      document.querySelectorAll('#region-tags .tag-btn').forEach(btn => {
+        if (btn.textContent.trim() === opts.region) {
+          btn.classList.add('active');
+          if (!activeFilters.regions.includes(opts.region)) activeFilters.regions.push(opts.region);
+        }
+      });
+      _renderFilteredCards();
+    }, 0);
   } else {
     _renderFilteredCards();
   }
 }
 
 function _renderFilteredCards() {
+  const priceMinEl = document.getElementById('price-min');
+  const priceMaxEl = document.getElementById('price-max');
+  const priceMin = priceMinEl && priceMinEl.value !== '' ? parseInt(priceMinEl.value) : null;
+  const priceMax = priceMaxEl && priceMaxEl.value !== '' ? parseInt(priceMaxEl.value) : null;
+
   let filtered = EXPERIENCES.filter(e => {
     if (activeFilters.regions.length && !activeFilters.regions.includes(e.region)) return false;
     if (activeFilters.themes.length && !activeFilters.themes.includes(e.theme)) return false;
     if (activeFilters.times.length && !activeFilters.times.includes(e.time)) return false;
+    if (priceMin !== null && e.price < priceMin) return false;
+    if (priceMax !== null && e.price > priceMax) return false;
     return true;
   });
 
@@ -1931,6 +1971,10 @@ function toggleTag(btn) {
 function clearFilters() {
   activeFilters = { regions: [], themes: [], times: [] };
   document.querySelectorAll('.tag-btn.active').forEach(b => b.classList.remove('active'));
+  const pmin = document.getElementById('price-min');
+  const pmax = document.getElementById('price-max');
+  if (pmin) pmin.value = '';
+  if (pmax) pmax.value = '';
   _renderFilteredCards();
 }
 
@@ -2178,6 +2222,20 @@ function validateAndConfirm() {
   document.getElementById('sc-name').textContent = name;
   document.getElementById('sc-total').textContent = 'NT$ ' + total.toLocaleString();
 
+  // Save new order so it shows in 我的訂單
+  userOrders.unshift({
+    id: orderId,
+    expId: App.state.booking.expId,
+    title: currentExp ? currentExp.title : '體驗',
+    region: currentExp ? currentExp.region : '',
+    img: currentExp ? currentExp.img : '',
+    date: dateStr,
+    sess: sessStr,
+    qty: qty,
+    total: total,
+    status: 'upcoming'
+  });
+
   bkShowStep('bk-success');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   spawnConfetti();
@@ -2200,6 +2258,35 @@ function spawnConfetti() {
     el.style.animationDelay = (Math.random() * 2) + 's';
     wrap.appendChild(el);
   }
+}
+
+/* ============================================================
+   RENDER ORDERS
+============================================================ */
+function renderOrders() {
+  const wrap = document.getElementById('order-table-wrap-dynamic');
+  if (!wrap) return;
+  // Remove any previously injected dynamic rows
+  wrap.querySelectorAll('.order-row-dynamic').forEach(el => el.remove());
+  // Prepend new orders (each userOrders entry) after the table head
+  const head = wrap.querySelector('.order-table-head');
+  userOrders.forEach(order => {
+    const row = document.createElement('div');
+    row.className = 'order-row-p order-row-dynamic';
+    row.innerHTML = `
+      <div class="order-exp">
+        <img class="order-exp-img" src="${order.img}" alt=""/>
+        <div>
+          <div class="order-exp-name">${order.title}</div>
+          <div class="order-exp-location"><span class="location-dot"></span>${order.region}</div>
+        </div>
+      </div>
+      <div class="order-date">${order.date.replace(/ \/ /g,'/')}<br>${order.sess}</div>
+      <div class="order-price">NT$${order.total.toLocaleString()}</div>
+      <div><span class="status-badge upcoming">未出發</span></div>
+      <div><button class="btn-cancel" onclick="cancelOrder(this)">取消訂單</button></div>`;
+    head.insertAdjacentElement('afterend', row);
+  });
 }
 
 /* ============================================================
@@ -2320,8 +2407,17 @@ function toggleAccordion(header) {
 }
 
 /* ============================================================
-   BOOT
+   HERO SEARCH
 ============================================================ */
+function heroSearch() {
+  const dest = document.getElementById('hero-dest-select').value;
+  App.go('products', { region: dest || null });
+}
+
+/* ============================================================
+   ORDERS STORAGE
+============================================================ */
+const userOrders = [];  // persists new orders added during session
 App.go('index');
 </script>
 </body>
