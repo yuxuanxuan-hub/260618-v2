@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap"
         rel="stylesheet" />
+    <script src="utils.js"></script>
 
     <style>
         /* ===== RESET & 基本設定 ===== */
@@ -545,11 +546,11 @@
     <nav>
         <a href="index.html" class="nav-logo">島嶼旅跡 ·</a>
         <ul class="nav-links">
-            <li><a href="#" class="active">探索體驗</a></li>
-            <li><a href="#">關於我們</a></li>
-            <li><a href="#">常見問題</a></li>
-            <li><a href="#">我的訂單</a></li>
-            <li><a href="#" class="nav-cta">登入 / 註冊</a></li>
+            <li><a href="products.html" class="active">探索體驗</a></li>
+            <li><a href="about.html">關於我們</a></li>
+            <li><a href="faq.html">常見問題</a></li>
+            <li><a href="profile-1.html">我的訂單</a></li>
+            <li><a href="login.html" class="nav-cta">登入 / 註冊</a></li>
         </ul>
     </nav>
 
@@ -929,35 +930,35 @@
             <div class="footer-col">
                 <h4>探索</h4>
                 <ul>
-                    <li><a href="#">所有體驗</a></li>
-                    <li><a href="#">戶外冒險</a></li>
-                    <li><a href="#">手作工藝</a></li>
-                    <li><a href="#">美食料理</a></li>
-                    <li><a href="#">文化歷史</a></li>
+                    <li><a href="products.html">所有體驗</a></li>
+                    <li><a href="products.html?category=戶外">戶外冒險</a></li>
+                    <li><a href="products.html?category=手作">手作工藝</a></li>
+                    <li><a href="products.html?category=美食">美食料理</a></li>
+                    <li><a href="products.html?category=文化">文化歷史</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>公司</h4>
                 <ul>
-                    <li><a href="#">關於我們</a></li>
-                    <li><a href="#">常見問答</a></li>
-                    <li><a href="#">旅遊嚮導招募</a></li>
-                    <li><a href="#">媒體合作</a></li>
+                    <li><a href="about.html">關於我們</a></li>
+                    <li><a href="faq.html">常見問答</a></li>
+                    <li><a href="index.html">旅遊嚮導招募</a></li>
+                    <li><a href="index.html">媒體合作</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>支援</h4>
                 <ul>
-                    <li><a href="#">退換政策</a></li>
-                    <li><a href="#">隱私政策</a></li>
-                    <li><a href="#">服務條款</a></li>
-                    <li><a href="#">查看訂單</a></li>
+                    <li><a href="index.html">退換政策</a></li>
+                    <li><a href="index.html">隱私政策</a></li>
+                    <li><a href="index.html">服務條款</a></li>
+                    <li><a href="profile-1.html">查看訂單</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
-            <a href="#">用心定義台灣每一寸土地</a>
+            <a href="index.html">用心定義台灣每一寸土地</a>
         </div>
     </footer>
 
@@ -1044,6 +1045,85 @@
         // ── 監聽價格輸入，即時篩選 ──
         document.getElementById('price-min').addEventListener('input', filterCards);
         document.getElementById('price-max').addEventListener('input', filterCards);
+        
+        // ── 初始化產品卡片：點擊導航 + 收藏功能 ──
+        attachCardClickHandlers();
+        attachFavoriteHandlers();
+        
+        // 如果URL有category參數，自動篩選該分類
+        const categoryParam = getUrlParam('category');
+        if (categoryParam) {
+            const buttons = document.querySelectorAll('#theme-tags .tag-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent.trim() === categoryParam || btn.dataset.category === categoryParam) {
+                    btn.classList.add('active');
+                }
+            });
+            filterCards();
+        }
+    </script>
+    
+    <script>
+        // ── 為卡片添加點擊事件導航到product-detail ──
+        function attachCardClickHandlers() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                const cardBody = card.querySelector('.card-body');
+                
+                // 點擊卡片（除了心形按鈕外）導航到product-detail
+                if (cardBody) {
+                    cardBody.style.cursor = 'pointer';
+                    cardBody.addEventListener('click', function(e) {
+                        // 確保點擊的不是心形按鈕或其內部
+                        if (!e.target.classList.contains('card-fav') && !e.target.closest('.card-fav')) {
+                            const productId = `product-${index + 1}`;
+                            window.location.href = `product-detail.html?id=${productId}`;
+                        }
+                    });
+                }
+                
+                // 卡片圖片區域也可點擊
+                const cardImg = card.querySelector('.card-img');
+                if (cardImg) {
+                    cardImg.style.cursor = 'pointer';
+                    cardImg.addEventListener('click', function(e) {
+                        if (!e.target.classList.contains('card-fav') && !e.target.closest('.card-fav')) {
+                            const productId = `product-${index + 1}`;
+                            window.location.href = `product-detail.html?id=${productId}`;
+                        }
+                    });
+                }
+            });
+        }
+        
+        // ── 為心形按鈕添加收藏功能 ──
+        function attachFavoriteHandlers() {
+            const favButtons = document.querySelectorAll('.card-fav');
+            favButtons.forEach((btn, index) => {
+                const card = btn.closest('.card');
+                const productId = `product-${index + 1}`;
+                
+                // 檢查是否已收藏
+                if (isFavorited(productId)) {
+                    btn.classList.add('liked');
+                    btn.textContent = '♥';
+                }
+                
+                // 點擊心形按鈕的處理
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止冒泡到卡片click事件
+                    
+                    const isFav = toggleFavorite(productId);
+                    if (isFav) {
+                        btn.classList.add('liked');
+                        btn.textContent = '♥';
+                    } else {
+                        btn.classList.remove('liked');
+                        btn.textContent = '♡';
+                    }
+                });
+            });
+        }
     </script>
 
 </body>

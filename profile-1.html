@@ -472,13 +472,13 @@
 
   <!-- ===================== NAV ===================== -->
   <nav>
-    <div class="nav-logo">島嶼旅跡</div>
+    <a href="index.html" class="nav-logo">島嶼旅跡</a>
     <ul class="nav-links">
-      <li><a href="#">探索體驗</a></li>
-      <li><a href="#">關於我們</a></li>
-      <li><a href="#">發現周邊</a></li>
-      <li><a href="#">我的訂單</a></li>
-      <li><a href="#" class="nav-cta">登入／註冊</a></li>
+      <li><a href="products.html">探索體驗</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="faq.html">常見問題</a></li>
+      <li><a href="profile-1.html">我的訂單</a></li>
+      <li><a href="login.html" class="nav-cta">登入／註冊</a></li>
     </ul>
   </nav>
 
@@ -622,11 +622,12 @@
         <!-- Favorites Panel (hidden) -->
         <div id="panel-favorites" style="display:none;">
           <div class="content-title">我的收藏</div>
-          <div style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:60px; text-align:center; color:var(--text-muted);">
+          <div data-empty-state style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:60px; text-align:center; color:var(--text-muted);">
             <div style="font-size:36px; margin-bottom:14px;">❤️</div>
             <div style="font-size:14px;">還沒有收藏的體驗</div>
             <div style="font-size:12px; margin-top:6px;">去探索你喜歡的體驗，點擊心型圖示即可收藏</div>
           </div>
+          <div id="favorites-list" style="display:grid; gap:12px;"></div>
         </div>
 
         <!-- Profile Panel (hidden) -->
@@ -681,39 +682,65 @@
       <div class="footer-col">
         <h4>探索</h4>
         <ul>
-          <li><a href="#">所有體驗</a></li>
-          <li><a href="#">戶外冒險</a></li>
-          <li><a href="#">手作工藝</a></li>
-          <li><a href="#">美食料理</a></li>
-          <li><a href="#">文化歷史</a></li>
+          <li><a href="products.html">所有體驗</a></li>
+          <li><a href="products.html?category=戶外">戶外冒險</a></li>
+          <li><a href="products.html?category=手作">手作工藝</a></li>
+          <li><a href="products.html?category=美食">美食料理</a></li>
+          <li><a href="products.html?category=文化">文化歷史</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>公司</h4>
         <ul>
-          <li><a href="#">關於我們</a></li>
-          <li><a href="#">常見問答</a></li>
-          <li><a href="#">旅遊嚮導招募</a></li>
-          <li><a href="#">媒體合作</a></li>
+          <li><a href="about.html">關於我們</a></li>
+          <li><a href="faq.html">常見問答</a></li>
+          <li><a href="index.html">旅遊嚮導招募</a></li>
+          <li><a href="index.html">媒體合作</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>支援</h4>
         <ul>
-          <li><a href="#">退換政策</a></li>
-          <li><a href="#">隱私政策</a></li>
-          <li><a href="#">服務條款</a></li>
-          <li><a href="#">查看訂單</a></li>
+          <li><a href="index.html">退換政策</a></li>
+          <li><a href="index.html">隱私政策</a></li>
+          <li><a href="index.html">服務條款</a></li>
+          <li><a href="profile-1.html">查看訂單</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
-      <a href="#">用心定量台灣一寸土地</a>
+      <a href="index.html">用心定量台灣一寸土地</a>
     </div>
   </footer>
 
+  <script src="utils.js"></script>
   <script>
+    function renderFavorites() {
+      const favorites = getFavorites();
+      const panel = document.getElementById('panel-favorites');
+      const emptyState = panel.querySelector('[data-empty-state]');
+      const list = document.getElementById('favorites-list');
+      if (!list) return;
+
+      if (favorites.length === 0) {
+        emptyState.style.display = '';
+        list.innerHTML = '';
+      } else {
+        emptyState.style.display = 'none';
+        list.innerHTML = favorites.map(fav => `
+          <a href="product-detail.html?id=${fav.id}" style="display:flex; gap:12px; align-items:center; background:#fff; border:1px solid var(--border); border-radius:14px; padding:12px; text-decoration:none; color:inherit;">
+            <img src="${fav.image}" alt="${fav.name}" style="width:88px; height:66px; object-fit:cover; border-radius:10px;" />
+            <div style="flex:1;">
+              <div style="font-size:14px; font-weight:600;">${fav.name}</div>
+              <div style="font-size:12px; color:var(--text-muted);">${fav.location}</div>
+              <div style="font-size:13px; color:var(--orange); font-weight:600;">${fav.price}</div>
+            </div>
+          </a>
+        `).join('');
+      }
+    }
+
     function switchTab(tab) {
       // Hide all panels
       document.getElementById('panel-orders').style.display = 'none';
@@ -725,6 +752,7 @@
 
       // Show target panel
       document.getElementById('panel-' + tab).style.display = '';
+      if (tab === 'favorites') renderFavorites();
 
       // Set active menu item
       const items = document.querySelectorAll('.menu-item:not(.logout)');

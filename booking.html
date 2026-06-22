@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="utils.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -760,13 +761,13 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">島嶼旅跡</div>
+    <a href="index.html" class="nav-logo">島嶼旅跡</a>
     <ul class="nav-links">
-      <li><a href="#">探索體驗</a></li>
-      <li><a href="#">關於我們</a></li>
-      <li><a href="#">常見問題</a></li>
-      <li><a href="#">我的訂單</a></li>
-      <li><a href="#" class="nav-cta">登入／註冊</a></li>
+      <li><a href="products.html">探索體驗</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="faq.html">常見問題</a></li>
+      <li><a href="profile-1.html">我的訂單</a></li>
+      <li><a href="login.html" class="nav-cta">登入／註冊</a></li>
     </ul>
   </nav>
 
@@ -969,6 +970,9 @@
             </div>
           </div>
 
+          <button class="next-btn" id="step2-prev" onclick="goBackToStep1()" style="margin-bottom: 12px; width: 100%;">
+            ← 返回上一步
+          </button>
           <button class="confirm-btn" id="confirm-btn" onclick="validateAndConfirm()">
             確認預訂並付款 🔒
           </button>
@@ -995,11 +999,11 @@
         </div>
         <div class="summary-row">
           <span class="label">人數</span>
-          <span class="value">1 人</span>
+          <span class="value" id="s2-qty-disp">1 人</span>
         </div>
         <div class="summary-row">
           <span class="label">總金額</span>
-          <span class="value price">NT$ 1,800</span>
+          <span class="value price" id="s2-total-disp">NT$ 1,800</span>
         </div>
       </div>
 
@@ -1044,11 +1048,11 @@
           </div>
           <div class="order-row">
             <span class="label">體驗名稱</span>
-            <span class="value">清水斷崖獨木舟探險</span>
+            <span class="value" id="sc-product">清水斷崖獨木舟探險</span>
           </div>
           <div class="order-row">
             <span class="label">目的地</span>
-            <span class="value">花蓮</span>
+            <span class="value" id="sc-location">花蓮</span>
           </div>
           <div class="order-row">
             <span class="label">體驗日期</span>
@@ -1064,13 +1068,13 @@
           </div>
           <div class="order-row">
             <span class="label">已付總金額</span>
-            <span class="value price">NT$ 1,800</span>
+            <span class="value price" id="sc-total">NT$ 1,800</span>
           </div>
         </div>
 
         <div class="success-actions">
-          <button class="btn-outline-dark" onclick="alert('返回首頁（待接入 index.html）')">← 返回首頁</button>
-          <button class="btn-orange" onclick="alert('查看我的訂單（待接入訂單頁）')">查看我的訂單</button>
+          <button class="btn-outline-dark" onclick="window.location.href='index.html'">← 返回首頁</button>
+          <button class="btn-orange" onclick="window.location.href='profile-1.html'">查看我的訂單</button>
         </div>
       </div>
     </div>
@@ -1121,11 +1125,30 @@
   <script>
     /* ---- State ---- */
     const state = {
-      selectedDate: null,   // Date object
-      selectedSession: null, // 'am' | 'pm'
+      selectedDate: null,
+      selectedSession: null,
       payMethod: 'cc',
       contactName: '',
     };
+
+    function loadSelectedProduct() {
+      const selected = JSON.parse(sessionStorage.getItem('selectedProduct') || '{}');
+      if (!selected || !selected.name) return;
+      const summaryEls = document.querySelectorAll('.summary-card');
+      summaryEls.forEach(card => {
+        const img = card.querySelector('.summary-img');
+        const name = card.querySelector('.summary-name');
+        if (img) img.src = selected.image;
+        if (name) name.textContent = selected.name;
+      });
+      document.querySelector('#page-step1 .summary-card .summary-name').textContent = selected.name;
+      document.querySelector('#page-step2 .summary-card .summary-name').textContent = selected.name;
+      document.querySelector('#page-step1 .summary-card .summary-img').src = selected.image;
+      document.querySelector('#page-step2 .summary-card .summary-img').src = selected.image;
+      document.getElementById('s2-calc').textContent = `NT$ ${selected.price.toLocaleString()} / 人`;
+      document.querySelector('#page-step2 .summary-card .value.price').textContent = `NT$ ${(selected.price * (selected.qty || 1)).toLocaleString()}`;
+      document.querySelector('#page-step1 .summary-card .value.price').textContent = `NT$ ${selected.price.toLocaleString()} / 人`;
+    }
 
     /* ============ CALENDAR ============ */
     let calYear, calMonth;
@@ -1216,14 +1239,23 @@
 
     /* ---- Go to Step 2 ---- */
     function goToStep2() {
-      // propagate values to step2 summary
       const d = state.selectedDate;
       const dateStr = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
       const sessStr = state.selectedSession === 'am' ? '09:00 上午場' : '14:00 下午場';
+      const selected = JSON.parse(sessionStorage.getItem('selectedProduct') || '{}');
+      const qty = selected.qty || 1;
+      const total = (selected.price || 0) * qty;
       document.getElementById('s2-date-disp').textContent = dateStr;
       document.getElementById('s2-sess-disp').textContent = sessStr;
-
+      document.getElementById('s2-qty-disp').textContent = `${qty} 人`;
+      document.getElementById('s2-total-disp').textContent = `NT$ ${total.toLocaleString()}`;
+      document.getElementById('sc-total').textContent = `NT$ ${total.toLocaleString()}`;
       showPage('page-step2');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBackToStep1() {
+      showPage('page-step1');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1285,9 +1317,15 @@
       const d = state.selectedDate;
       const dateStr = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
       const sessStr = state.selectedSession === 'am' ? '09:00 上午場' : '14:00 下午場';
+      const selected = JSON.parse(sessionStorage.getItem('selectedProduct') || '{}');
+      const qty = selected.qty || 1;
+      const total = (selected.price || 0) * qty;
       document.getElementById('sc-date').textContent = dateStr;
       document.getElementById('sc-sess').textContent = sessStr;
       document.getElementById('sc-name').textContent = name;
+      document.getElementById('sc-total').textContent = `NT$ ${total.toLocaleString()}`;
+      document.getElementById('sc-product').textContent = selected.name || '體驗名稱';
+      document.getElementById('sc-location').textContent = selected.location || '地點';
 
       showPage('page-success');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1322,6 +1360,7 @@
 
     /* ---- Init ---- */
     initCalendar();
+    loadSelectedProduct();
 
     // make step1 layout two-column
     document.querySelector('#page-step1 .booking-body').classList.remove('single');
