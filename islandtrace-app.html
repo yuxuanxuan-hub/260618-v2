@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>島嶼旅跡 IslandTrace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8633A;
+      --orange-light: #F07A54;
+      --dark: #1A1A2E;
+      --navy: #16213E;
+      --cream: #F5F0EB;
+      --warm-white: #FAF8F5;
+      --text-main: #2C2C2C;
+      --text-muted: #888;
+      --border: #E0DAD3;
+      --star: #E8633A;
+      --serif: 'Noto Serif TC', serif;
+      --sans: 'Noto Sans TC', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-main);
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      background: rgba(20, 20, 35, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; }
+
+    /* ===================== HERO ===================== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1470004914212-05527e49370b?w=1600&q=80') center/cover no-repeat;
+      filter: brightness(0.62);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 72px;
+      max-width: 640px;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--orange);
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(42px, 5.5vw, 68px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.18;
+      margin-bottom: 4px;
+    }
+
+    .hero-title .accent {
+      color: var(--orange);
+      display: block;
+    }
+
+    .hero-sub {
+      color: rgba(255,255,255,0.72);
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 18px 0 32px;
+      max-width: 380px;
+    }
+
+    .hero-search {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 40px;
+      padding: 6px 6px 6px 18px;
+      gap: 8px;
+      max-width: 420px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    }
+
+    .hero-search select,
+    .hero-search input[type="date"] {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 13px;
+      color: var(--text-main);
+      font-family: var(--sans);
+      padding: 4px 6px;
+      cursor: pointer;
+    }
+
+    .hero-search .divider {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .hero-search button {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: var(--sans);
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .hero-search button:hover { background: var(--orange-light); }
+
+    /* ===================== STATS ===================== */
+    .stats-bar {
+      background: var(--warm-white);
+      padding: 40px 72px;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1;
+    }
+
+    .stat-num span { color: var(--orange); }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    /* ===================== SECTIONS SHARED ===================== */
+    section { padding: 72px 72px; }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1.25;
+      margin-bottom: 36px;
+    }
+
+    /* ===================== THEMES ===================== */
+    .themes { background: #fff; }
+
+    .theme-tags {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .theme-tag {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: var(--warm-white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 24px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-width: 88px;
+    }
+    .theme-tag:hover { border-color: var(--orange); box-shadow: 0 2px 12px rgba(232,99,58,0.12); }
+
+    .theme-tag .icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+    .theme-tag span { font-size: 12px; color: var(--text-main); font-weight: 400; }
+
+    /* ===================== HOT SECTION ===================== */
+    .hot-section { background: var(--cream); }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+
+    .section-header .section-title { margin-bottom: 0; }
+
+    .view-all {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-main);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-weight: 400;
+      transition: border-color 0.2s;
+      white-space: nowrap;
+    }
+    .view-all:hover { border-color: var(--orange); color: var(--orange); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid + .cards-grid { margin-top: 20px; }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.22s, box-shadow 0.22s;
+      cursor: pointer;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+
+    .card-img {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      background: #ddd;
+    }
+
+    .card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .card:hover .card-img img { transform: scale(1.04); }
+
+    .card-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(4px);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .card-fav {
+      position: absolute;
+      top: 10px; right: 12px;
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,0.88);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .card-body { padding: 14px 16px 16px; }
+
+    .card-type {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 5px;
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .card-meta .dot {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .card-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .card-price span {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .card-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .stars { color: var(--star); font-size: 11px; letter-spacing: 1px; }
+
+    .rating-count { font-size: 11px; color: var(--text-muted); }
+
+    /* ===================== GUIDE BANNER ===================== */
+    .guide-banner {
+      background: var(--navy);
+      padding: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .guide-banner::before {
+      content: '';
+      position: absolute;
+      right: -60px; top: 50%;
+      transform: translateY(-50%);
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(232,99,58,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .guide-banner::after {
+      content: '';
+      position: absolute;
+      right: 100px; bottom: -80px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+
+    .guide-text { position: relative; z-index: 1; }
+
+    .guide-text h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+
+    .guide-text p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.62);
+      max-width: 440px;
+      line-height: 1.8;
+    }
+
+    .guide-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--sans);
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--orange-light); }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      border-radius: 28px;
+      padding: 12px 28px;
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+      font-family: var(--sans);
+      white-space: nowrap;
+      transition: border-color 0.2s;
+    }
+    .btn-outline:hover { border-color: #fff; }
+
+    /* ===================== REVIEWS ===================== */
+    .reviews { background: #fff; }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .review-card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .review-stars { color: var(--star); font-size: 13px; margin-bottom: 14px; }
+
+    .review-text {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .reviewer-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .reviewer-name { font-size: 13px; font-weight: 600; }
+    .reviewer-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: var(--dark);
+      padding: 60px 72px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-brand .logo {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.48);
+      line-height: 1.9;
+      max-width: 220px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-col ul { list-style: none; }
+
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col ul li a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.48);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: rgba(255,255,255,0.82); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+    }
+
+    .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.3); }
+
+    .footer-bottom a { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .footer-bottom a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      nav { padding: 0 28px; }
+      .hero-content { padding: 0 36px; }
+      section { padding: 56px 36px; }
+      .stats-bar { padding: 36px; gap: 48px; }
+      .guide-banner { padding: 56px 36px; }
+      footer { padding: 48px 36px 24px; }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .hero-content { padding: 0 20px; }
+      section { padding: 40px 20px; }
+      .stats-bar { padding: 28px 20px; gap: 24px; flex-wrap: wrap; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .guide-banner { flex-direction: column; padding: 40px 20px; }
+      footer { padding: 40px 20px 20px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+/* ===== SPA shell ===== */
+.view { display: none; }
+.view.active { display: block; }
+body.login-mode { overflow: hidden; }
+#view-login { min-height: 100vh; }
+.nav-links a.active { color: #fff; font-weight: 500; }
+.nav-logo { cursor: pointer; }
+
+/* ===== Products (from products.html, deduped nav/footer) ===== */
+.breadcrumb { margin-top: 60px; padding: 14px 48px; background: var(--warm-white); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.breadcrumb a { color: var(--text-muted); } .breadcrumb a:hover { color: var(--orange); }
+.breadcrumb .sep { color: var(--border); } .breadcrumb .current { color: var(--text-main); }
+.explore-wrapper { display: flex; max-width: 1280px; margin: 0 auto; padding: 32px 48px 80px; align-items: flex-start; }
+.filter-sidebar { width: 220px; flex-shrink: 0; position: sticky; top: 76px; padding-right: 32px; }
+.filter-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.filter-header h2 { font-family: var(--serif); font-size: 15px; font-weight: 700; }
+.filter-clear { font-size: 12px; color: var(--orange); cursor: pointer; background: none; border: none; font-family: var(--sans); }
+.filter-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.filter-section:last-child { border-bottom: none; }
+.filter-section-title { font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+.tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-btn { padding: 5px 12px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 12px; font-family: var(--sans); background: #fff; cursor: pointer; transition: all .18s; }
+.tag-btn:hover { border-color: var(--orange); color: var(--orange); }
+.tag-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+.tag-btn.has-icon { display: flex; align-items: center; gap: 5px; }
+.price-range { display: flex; align-items: center; gap: 8px; }
+.price-input { flex: 1; min-width: 0; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-family: var(--sans); outline: none; }
+.explore-main { flex: 1; min-width: 0; }
+.explore-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.result-count { font-size: 13px; color: var(--text-muted); }
+.sort-select { padding: 7px 32px 7px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-family: var(--sans); appearance: none; outline: none; cursor: pointer; }
+#view-products .cards-grid { grid-template-columns: repeat(3, 1fr); }
+#view-products .card { border: 1px solid var(--border); }
+.card-fav.liked { color: var(--orange); }
+
+/* ===== About ===== */
+.about-hero { background: var(--navy); padding: 120px 72px 72px; position: relative; overflow: hidden; min-height: 300px; display: flex; align-items: center; }
+.about-hero-decoration { position: absolute; right: 80px; top: 50%; transform: translateY(-50%); width: 280px; height: 280px; border-radius: 50%; background: rgba(60,40,60,.55); pointer-events: none; }
+.about-hero-content { position: relative; z-index: 2; max-width: 560px; }
+.about-hero h1 { font-family: var(--serif); font-size: clamp(36px,4.5vw,54px); font-weight: 900; color: #fff; line-height: 1.25; margin-bottom: 20px; }
+.about-hero h1 .accent { color: var(--orange); }
+.about-hero p { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.9; max-width: 420px; }
+.brand-story { padding: 80px 72px; background: #fff; }
+.brand-story-inner { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: center; }
+.brand-story-img { border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; }
+.brand-story-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.brand-story-text h2 { font-family: var(--serif); font-size: clamp(24px,2.6vw,32px); font-weight: 900; margin-bottom: 24px; }
+.brand-story-text p { font-size: 13px; color: #555; line-height: 1.9; margin-bottom: 14px; }
+.core-values { background: var(--warm-white); padding: 80px 72px; }
+.values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.value-card { background: #fff; border-radius: 14px; padding: 28px 24px; border: 1.5px solid var(--border); }
+.value-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+.value-card h3 { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.value-card p { font-size: 12px; color: #666; line-height: 1.85; }
+.team-section { padding: 80px 72px; background: #fff; }
+.team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+.team-card { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; cursor: pointer; }
+.team-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); transition: transform .35s, filter .35s; }
+.team-card:hover img { transform: scale(1.04); filter: grayscale(0); }
+.team-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,20,40,.75) 0%, transparent 55%); }
+.team-card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px; }
+.team-card-role { font-size: 10px; color: var(--orange); letter-spacing: .08em; margin-bottom: 4px; }
+.team-card-name { font-family: var(--serif); font-size: 15px; font-weight: 700; color: #fff; }
+.numbers-section { background: var(--navy); padding: 72px; }
+.numbers-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; }
+.number-value { font-family: var(--serif); font-size: clamp(40px,5vw,60px); font-weight: 900; color: #fff; line-height: 1; margin-bottom: 10px; }
+.number-value .accent { color: var(--orange); }
+.number-label { font-size: 12px; color: rgba(255,255,255,.5); }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .55s ease, transform .55s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== FAQ ===== */
+#view-faq { display: flex; flex-direction: column; min-height: calc(100vh - 60px); }
+#view-faq.active { display: flex; }
+.faq-hero { background: var(--warm-white); text-align: center; padding: 64px 72px 56px; border-bottom: 1px solid var(--border); margin-top: 60px; }
+.faq-hero-eyebrow { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 11px; color: var(--orange); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 16px; }
+.faq-hero-eyebrow::before, .faq-hero-eyebrow::after { content: ''; display: block; width: 32px; height: 1.5px; background: var(--orange); }
+.faq-hero h1 { font-family: var(--serif); font-size: clamp(28px,4vw,40px); font-weight: 900; margin-bottom: 12px; }
+.faq-content { flex: 1; max-width: 800px; margin: 0 auto; padding: 56px 24px 80px; width: 100%; }
+.faq-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+.tab-btn { padding: 9px 20px; border-radius: 24px; border: 1.5px solid var(--border); background: #fff; font-size: 13px; font-family: var(--sans); cursor: pointer; transition: all .2s; }
+.tab-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 500; }
+.faq-section { display: none; } .faq-section.active { display: block; }
+.faq-section-title { display: flex; align-items: center; gap: 8px; font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px solid var(--border); }
+.accordion-item { border-bottom: 1px solid var(--border); }
+.accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; cursor: pointer; gap: 16px; }
+.accordion-header.open .accordion-question { color: var(--orange); }
+.accordion-question { font-size: 14px; transition: color .2s; }
+.accordion-icon { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; color: var(--text-muted); }
+.accordion-header.open .accordion-icon { background: var(--orange); border-color: var(--orange); color: #fff; }
+.accordion-body { display: none; padding: 0 0 20px; } .accordion-body.open { display: block; }
+.accordion-body p { font-size: 13px; color: var(--text-muted); line-height: 1.9; }
+.contact-card { background: var(--warm-white); border: 1.5px solid var(--border); border-radius: 16px; padding: 40px 32px; text-align: center; margin-top: 52px; }
+.contact-card h3 { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.contact-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.btn-outline-dark { background: transparent; color: var(--text-main); border: 1.5px solid var(--border); border-radius: 28px; padding: 11px 26px; font-size: 13px; font-family: var(--sans); cursor: pointer; }
+
+/* ===== Profile ===== */
+.profile-page { padding-top: 60px; min-height: 100vh; background: var(--warm-white); }
+.profile-container { max-width: 1080px; margin: 0 auto; padding: 40px 32px; display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: start; }
+.sidebar { background: #fff; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+.profile-card { padding: 32px 20px 24px; text-align: center; border-bottom: 1px solid var(--border); }
+.avatar-wrap { position: relative; display: inline-block; margin-bottom: 14px; }
+.avatar { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 2px 12px rgba(0,0,0,.14); }
+.avatar-edit { position: absolute; bottom: 2px; right: 2px; width: 22px; height: 22px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; color: #fff; }
+.profile-name { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.profile-email { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; }
+.member-badge { display: inline-flex; align-items: center; gap: 5px; background: #fff9f0; border: 1.5px solid #f5d89e; border-radius: 20px; padding: 4px 12px; font-size: 11px; color: #b07d1a; }
+.sidebar-menu { padding: 8px 0; }
+.menu-item { display: flex; align-items: center; gap: 11px; padding: 13px 20px; font-size: 13px; cursor: pointer; border-left: 3px solid transparent; transition: background .15s, color .15s; }
+.menu-item:hover { background: var(--warm-white); color: var(--orange); }
+.menu-item.active { background: #fef4f0; color: var(--orange); font-weight: 500; border-left-color: var(--orange); }
+.menu-item.logout { color: var(--text-muted); margin-top: 4px; border-top: 1px solid var(--border); }
+.content-title { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.order-table-wrap { background: #fff; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+.order-table-head, .order-row { display: grid; grid-template-columns: 2.8fr 1.4fr 1.2fr 1fr 1.2fr; padding: 14px 20px; align-items: center; }
+.order-table-head { border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.order-row { padding: 18px 20px; border-bottom: 1px solid var(--border); }
+.order-exp { display: flex; align-items: center; gap: 12px; }
+.order-exp-img { width: 52px; height: 42px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.order-exp-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.order-exp-location { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted); }
+.location-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+.order-price { font-size: 13px; font-weight: 600; color: var(--orange); }
+.status-badge { display: inline-flex; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.status-badge.upcoming { background: #fef0ef; color: #E63329; border: 1px solid #f5c0bc; }
+.status-badge.completed { background: #edf7f2; color: #3DAA6E; border: 1px solid #b8e4cc; }
+.btn-cancel { padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--orange); background: #fff; color: var(--orange); font-size: 12px; font-weight: 500; font-family: var(--sans); cursor: pointer; }
+
+/* ===== Login ===== */
+#view-login .page { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+#view-login .hero { position: relative; overflow: hidden; }
+#view-login .hero__photo { position: absolute; inset: 0; background: linear-gradient(to bottom,rgba(0,0,0,.25),rgba(0,0,0,.55)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=80') center/cover; }
+#view-login .hero__logo { position: absolute; top: 32px; left: 32px; font-family: var(--serif); font-size: 18px; font-weight: 700; color: #fff; }
+#view-login .hero__copy { position: absolute; bottom: 56px; left: 40px; right: 40px; }
+#view-login .hero__tagline { font-family: var(--serif); font-size: clamp(28px,3.5vw,44px); font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 12px; }
+#view-login .hero__tagline .accent { color: #F26522; }
+#view-login .form-panel { background: #fff; display: flex; align-items: center; justify-content: center; padding: 60px 40px; }
+#view-login .form-inner { width: 100%; max-width: 360px; }
+#view-login .tabs { display: grid; grid-template-columns: 1fr 1fr; background: #f5f5f5; border-radius: 12px; padding: 4px; margin-bottom: 36px; }
+#view-login .tab { border: none; background: transparent; border-radius: 9px; padding: 10px; font-family: var(--sans); font-size: 15px; color: #888; cursor: pointer; }
+#view-login .tab.active { background: #fff; color: #1a1a1a; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+#view-login .field { margin-bottom: 18px; }
+#view-login .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+#view-login .input-wrap input { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 12px 44px 12px 14px; font-size: 14px; font-family: var(--sans); outline: none; }
+#view-login .btn-primary { width: 100%; background: #E63329; color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 700; font-family: var(--sans); cursor: pointer; margin-top: 24px; }
+#view-login .btn-social { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 12px; font-size: 14px; background: #fff; cursor: pointer; margin-bottom: 10px; }
+#view-login .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #888; font-size: 12px; }
+#view-login .divider::before, #view-login .divider::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+
+/* ===== Detail ===== */
+.detail-wrapper { display: flex; gap: 48px; max-width: 1280px; margin: 0 auto; padding: 32px 48px 80px; align-items: flex-start; }
+.detail-main { flex: 1; min-width: 0; }
+.gallery-main { width: 100%; height: 440px; border-radius: 16px; overflow: hidden; background: #ddd; margin-bottom: 14px; }
+.gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-thumbs { display: flex; gap: 12px; margin-bottom: 32px; }
+.thumb { width: 100px; height: 76px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; opacity: .75; }
+.thumb.active { border-color: var(--orange); opacity: 1; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.product-title { font-family: var(--serif); font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+.product-meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--text-muted); padding-bottom: 24px; margin-bottom: 28px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.detail-section { margin-bottom: 36px; }
+.detail-section .section-title { font-family: var(--serif); font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.section-desc { font-size: 13.5px; line-height: 1.9; }
+.highlight-list { list-style: none; }
+.highlight-list li { display: flex; gap: 10px; padding: 10px 0; font-size: 13.5px; border-bottom: 1px solid var(--border); }
+.highlight-list .hl-icon { color: var(--orange); flex-shrink: 0; }
+.fee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.fee-box { background: var(--cream); border-radius: 12px; padding: 20px 22px; }
+.fee-box h4 { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+.fee-box.included h4 { color: #2E7D4F; } .fee-box.excluded h4 { color: #C0392B; }
+.fee-box ul { list-style: none; } .fee-box li { font-size: 12.5px; margin-bottom: 9px; padding-left: 14px; position: relative; }
+.fee-box li::before { content: '•'; position: absolute; left: 0; color: var(--text-muted); }
+.review { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.review-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.review-name { font-weight: 600; font-size: 13.5px; }
+.review-date { font-size: 11px; color: var(--text-muted); margin-left: 8px; }
+.review-stars { color: var(--star); font-size: 12px; margin: 5px 0 8px; }
+.review-text { font-size: 13px; line-height: 1.8; }
+.booking-card { width: 340px; flex-shrink: 0; position: sticky; top: 84px; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px; box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+.price-now { font-family: var(--serif); font-size: 26px; font-weight: 700; }
+.price-unit { font-size: 12px; color: var(--text-muted); }
+.rating-row { display: flex; align-items: center; gap: 6px; font-size: 13px; margin: 10px 0 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+.qty-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-size: 13px; font-weight: 500; }
+.qty-control { display: flex; align-items: center; gap: 14px; }
+.qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: var(--sans); }
+.qty-btn:disabled { opacity: .4; cursor: not-allowed; }
+.qty-num { font-size: 15px; font-weight: 600; min-width: 18px; text-align: center; }
+.total-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 500; }
+.total-amount { font-family: var(--serif); font-size: 19px; font-weight: 700; color: var(--orange); }
+.book-btn { width: 100%; padding: 14px; background: var(--orange); color: #fff; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sans); }
+.book-btn:hover { background: var(--orange-light); }
+.booking-note { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 14px; }
+
+/* ===== Booking (calendar fix) ===== */
+#view-booking { background: var(--warm-white); padding-top: 60px; }
+.booking-page { display: none; } .booking-page.active { display: block; }
+.stepper-wrap { background: #fff; border-bottom: 1px solid var(--border); padding: 24px 0 20px; }
+.stepper { display: flex; align-items: center; justify-content: center; max-width: 520px; margin: 0 auto; }
+.step-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.step-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; border: 2px solid var(--border); background: #fff; color: var(--text-muted); }
+.step-item.done .step-circle { background: #3BAA6E; border-color: #3BAA6E; color: #fff; }
+.step-item.active .step-circle { background: var(--orange); border-color: var(--orange); color: #fff; }
+.step-label { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+.step-item.active .step-label { color: var(--orange); font-weight: 600; }
+.step-line { height: 2px; width: 100px; background: var(--border); margin-bottom: 20px; flex-shrink: 0; }
+.step-line.done { background: var(--orange); }
+.booking-body { max-width: 1060px; margin: 0 auto; padding: 48px 24px 64px; display: grid; grid-template-columns: 1fr 320px; gap: 28px; align-items: start; }
+.booking-card-inner { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+.card-section-title { display: flex; align-items: center; gap: 8px; font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+.calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.cal-month { font-family: var(--serif); font-size: 16px; font-weight: 700; }
+.cal-nav { background: none; border: 1.5px solid var(--border); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; font-size: 14px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; text-align: center; width: 100%; }
+.cal-dow { font-size: 11px; color: var(--text-muted); padding: 8px 0; font-weight: 500; }
+.cal-day { aspect-ratio: 1; width: 100%; max-width: 44px; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer; transition: background .15s, color .15s; user-select: none; }
+.cal-day:hover:not(.disabled):not(.empty) { background: #FDF1EC; color: var(--orange); }
+.cal-day.selected { background: var(--orange); color: #fff; font-weight: 600; }
+.cal-day.today { border: 1.5px solid var(--orange); color: var(--orange); font-weight: 600; }
+.cal-day.today.selected { background: var(--orange); color: #fff; }
+.cal-day.disabled { color: #ccc; cursor: not-allowed; }
+.cal-day.empty { cursor: default; pointer-events: none; }
+.session-label { font-size: 13px; font-weight: 600; margin: 28px 0 14px; }
+.session-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.session-btn { border: 1.5px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; background: #fff; text-align: left; }
+.session-btn.selected { border-color: var(--orange); background: #FDF1EC; }
+.session-btn .time { font-family: var(--serif); font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.session-btn .tag { font-size: 11px; color: var(--text-muted); }
+.dot-am { background: #F5A623; } .dot-pm { background: var(--orange); }
+.session-btn .tag .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
+.next-btn { width: 100%; background: var(--orange); color: #fff; border: none; border-radius: 40px; padding: 15px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: var(--sans); margin-top: 28px; }
+.next-btn:disabled { background: #ddd; color: #aaa; cursor: not-allowed; }
+.summary-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); position: sticky; top: 80px; }
+.summary-card h3 { font-family: var(--serif); font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+.summary-img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; margin-bottom: 14px; }
+.summary-name { font-family: var(--serif); font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.summary-row .label { color: var(--text-muted); }
+.summary-row .value.price { font-family: var(--serif); font-size: 16px; color: var(--orange); font-weight: 700; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.form-group label { font-size: 12px; font-weight: 600; }
+.form-group label .req { color: var(--orange); }
+.form-input { border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-size: 13px; font-family: var(--sans); outline: none; }
+.form-group.has-error .form-input { border-color: #e74c3c; }
+.error-msg { font-size: 11px; color: #e74c3c; display: none; }
+.form-group.has-error .error-msg { display: block; }
+.pay-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.pay-option { border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.pay-option.selected { border-color: var(--orange); background: #FDF1EC; }
+.pay-icon { width: 36px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; font-weight: 700; color: #fff; }
+.pay-icon.cc { background: #1A73E8; } .pay-icon.line { background: #00B900; } .pay-icon.apple { background: #000; }
+.confirm-btn { width: 100%; background: var(--orange); color: #fff; border: none; border-radius: 40px; padding: 16px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--sans); margin-top: 8px; }
+.success-page { background: #fff; position: relative; overflow: hidden; }
+.success-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 60px 24px 80px; }
+.check-icon { width: 72px; height: 72px; background: #3BAA6E; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; margin-bottom: 28px; }
+.success-title { font-family: var(--serif); font-size: clamp(24px,4vw,36px); font-weight: 900; text-align: center; margin-bottom: 12px; }
+.order-card { background: var(--warm-white); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 32px; width: 100%; max-width: 480px; margin-bottom: 36px; }
+.order-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.order-id { background: var(--dark); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 6px; }
+.success-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.btn-orange { background: var(--orange); color: #fff; border: none; border-radius: 40px; padding: 13px 28px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--sans); }
+
+@media (max-width: 1024px) {
+  .explore-wrapper { padding: 32px 28px 60px; }
+  .filter-sidebar { display: none; }
+  #view-products .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .brand-story-inner { grid-template-columns: 1fr; gap: 32px; }
+  .values-grid, .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail-wrapper { flex-direction: column; padding: 32px 28px 60px; }
+  .booking-card { width: 100%; position: static; }
+  .booking-body { grid-template-columns: 1fr; }
+  .profile-container { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  #view-login .page { grid-template-columns: 1fr; }
+  #view-login .hero { min-height: 220px; }
+}
+@media (max-width: 680px) {
+  .nav-links { display: none; }
+  #view-products .cards-grid, .cards-grid { grid-template-columns: 1fr; }
+  .fee-grid, .session-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .order-table-head { display: none; }
+  .order-row { grid-template-columns: 1fr; gap: 10px; }
+}
+  </style>
+</head>
+<body>
+<nav id="site-nav">
+  <div class="nav-logo" data-go="index" role="link" tabindex="0">島嶼旅跡</div>
+  <ul class="nav-links">
+    <li><a href="#" data-go="products">探索體驗</a></li>
+    <li><a href="#" data-go="about">關於我們</a></li>
+    <li><a href="#" data-go="faq">常見問題</a></li>
+    <li><a href="#" data-go="profile">我的訂單</a></li>
+    <li><a href="#" class="nav-cta" data-go="login">登入／註冊</a></li>
+  </ul>
+</nav>
+<div id="view-index" class="view active"><!-- HERO -->
+  <section class="hero" style="padding: 0;">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">ISLAND TRACE · 深度在地體驗</div>
+      <h1 class="hero-title">
+        與台灣這片土地，<br>
+        <span class="accent">真實相遇</span>
+      </h1>
+      <p class="hero-sub">超過 200 個在地嚮導帶路的深度體驗，從山頂到海岸，從廟房到工坊，找到屬於你的那一場旅途。</p>
+      <div class="hero-search">
+        <select>
+          <option>← 選擇目的地</option>
+          <option>台北</option>
+          <option>台南</option>
+          <option>花蓮</option>
+          <option>台東</option>
+        </select>
+        <div class="divider"></div>
+        <input type="date" />
+        <button>搜尋體驗</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">200<span>+</span></div>
+      <div class="stat-label">精選在地體驗</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98<span>%</span></div>
+      <div class="stat-label">旅客好評率</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">150<span>+</span></div>
+      <div class="stat-label">認證在地嚮導</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">22</div>
+      <div class="stat-label">縣市全台覆蓋</div>
+    </div>
+  </div>
+
+  <!-- THEMES -->
+  <section class="themes">
+    <div class="section-eyebrow">EXPLORE BY THEME</div>
+    <div class="section-title">找到你的體驗類型</div>
+    <div class="theme-tags">
+      <div class="theme-tag">
+        <div class="icon">🏕️</div>
+        <span>戶外登頂</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">🧶</div>
+        <span>手作工藝</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">🍜</div>
+        <span>美食料理</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">🏯</div>
+        <span>文化歷史</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">🌊</div>
+        <span>水上活動</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">🌾</div>
+        <span>農村生活</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">🎬</div>
+        <span>傳統藝術</span>
+      </div>
+      <div class="theme-tag">
+        <div class="icon">📷</div>
+        <span>攝影遊地</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOT THIS WEEK -->
+  <section class="hot-section">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">HOT THIS WEEK</div>
+        <div class="section-title">本週熱門體驗</div>
+      </div>
+      <a href="#" class="view-all" data-go="products">查看全部 →</a>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600&q=75" alt="森林探秘" loading="lazy" />
+          <div class="card-badge">戶外登頂</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">戶外登頂</div>
+          <div class="card-title">淡水老街尋幽木升探秘</div>
+          <div class="card-meta">
+            <span>花蓮</span><div class="dot"></div><span>半天</span>
+          </div>
+          <div class="card-price">NT$1,800 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(118)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=75" alt="手作工藝" loading="lazy" />
+          <div class="card-badge">手作工藝</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">手作工藝</div>
+          <div class="card-title">九份老街手作陶藝體驗</div>
+          <div class="card-meta">
+            <span>新北</span><div class="dot"></div><span>3小時</span>
+          </div>
+          <div class="card-price">NT$980 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(209)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=75" alt="料理課" loading="lazy" />
+          <div class="card-badge">美食料理</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">美食料理</div>
+          <div class="card-title">台中市場私廚料理課</div>
+          <div class="card-meta">
+            <span>台中</span><div class="dot"></div><span>4小時</span>
+          </div>
+          <div class="card-price">NT$1,500 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(188)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75" alt="日出" loading="lazy" />
+          <div class="card-badge">自然探索</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">自然探索</div>
+          <div class="card-title">阿里山日出觀星嚮導</div>
+          <div class="card-meta">
+            <span>嘉義</span><div class="dot"></div><span>全天</span>
+          </div>
+          <div class="card-price">NT$2,200 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(96)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards-grid" style="margin-top: 20px;">
+      <!-- Card 5 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=75" alt="藍染" loading="lazy" />
+          <div class="card-badge">手作工藝</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">手作工藝</div>
+          <div class="card-title">淡水老街藍染拼布工作坊</div>
+          <div class="card-meta">
+            <span>新北</span><div class="dot"></div><span>3小時</span>
+          </div>
+          <div class="card-price">NT$1,200 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(141)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75" alt="文化歷史" loading="lazy" />
+          <div class="card-badge">文化歷史</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">文化歷史</div>
+          <div class="card-title">台南府城古蹟定點導覽</div>
+          <div class="card-meta">
+            <span>台南</span><div class="dot"></div><span>半天</span>
+          </div>
+          <div class="card-price">NT$800 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(263)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75" alt="農場" loading="lazy" />
+          <div class="card-badge">自然探索</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">自然探索</div>
+          <div class="card-title">宜蘭梯田生態農場體驗</div>
+          <div class="card-meta">
+            <span>宜蘭</span><div class="dot"></div><span>半天</span>
+          </div>
+          <div class="card-price">NT$1,100 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★</span>
+            <span class="rating-count">(17)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="海鮮" loading="lazy" />
+          <div class="card-badge">美食料理</div>
+          <div class="card-fav">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-type">美食料理</div>
+          <div class="card-title">高雄漁港生態漁料理日</div>
+          <div class="card-meta">
+            <span>高雄</span><div class="dot"></div><span>4小時</span>
+          </div>
+          <div class="card-price">NT$1,350 <span>/ 人起</span></div>
+          <div class="card-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-count">(142)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDE BANNER -->
+  <div class="guide-banner">
+    <div class="guide-text">
+      <h2>成為在地嚮導，<br>分享你的台灣故事</h2>
+      <p>你是本地達人嗎？無論是深山秘境，海岸手工漁法，還是廟前廊道裡傳授傳統技藝，都可以在這唯一的平台，與來自世界各地的旅人分享。</p>
+    </div>
+    <div class="guide-actions">
+      <button class="btn-primary">立即申請嚮導</button>
+      <button class="btn-outline">了解更多</button>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <section class="reviews">
+    <div class="section-eyebrow">TRAVELER REVIEWS</div>
+    <div class="section-title">旅人的真實心聲</div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「淡水老街的那次木升探秘之旅，嚮導帶我們認識了好多在地的歷史故事，讓整個旅程充滿溫度，是我近年印象最深的一次！」</p>
+        <div class="reviewer">
+          <img class="reviewer-avatar" src="https://i.pravatar.cc/80?img=47" alt="陳怡萍" />
+          <div>
+            <div class="reviewer-name">陳怡萍</div>
+            <div class="reviewer-meta">旅遊達人 · 2025.03</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「台南古蹟導覽完全顛覆了我對台南的印象！嚮導的故事有深度，帶著我們走進不為人知的小巷，感覺像一個老朋友帶路！」</p>
+        <div class="reviewer">
+          <img class="reviewer-avatar" src="https://i.pravatar.cc/80?img=32" alt="林大偉" />
+          <div>
+            <div class="reviewer-name">林大偉</div>
+            <div class="reviewer-meta">生活系旅人 · 2023.04</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">「六份的陶藝課讓我這個完全沒有美術天賦的人做出了一個還不錯的杯子哈哈，老師超有耐心，帶著你一步一步完成，感覺超有成就感！」</p>
+        <div class="reviewer">
+          <img class="reviewer-avatar" src="https://i.pravatar.cc/80?img=56" alt="山田あかり" />
+          <div>
+            <div class="reviewer-name">山田あかり</div>
+            <div class="reviewer-meta">來自大阪 · 2025.05</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section></div>
+<div id="view-products" class="view">
+    <div class="breadcrumb">
+        <a href="#" data-go="index">首頁</a>
+        <span class="sep">›</span>
+        <span class="current">探索體驗</span>
+    </div>
+
+    <!-- ====== 主內容：篩選欄 + 卡片區 ====== -->
+    <div class="explore-wrapper">
+
+        <!-- ===== 左側篩選欄 ===== -->
+        <aside class="filter-sidebar">
+            <div class="filter-header">
+                <h2>篩選條件</h2>
+                <button class="filter-clear" onclick="clearFilters()">清除全部</button>
+            </div>
+
+            <!-- 地區 -->
+            <div class="filter-section">
+                <div class="filter-section-title">地區</div>
+                <div class="tag-group" id="region-tags">
+                    <button class="tag-btn" onclick="toggleTag(this)">台北</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">新北</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">台中</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">台南</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">高雄</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">宜蘭</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">花蓮</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">嘉義</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">屏東</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">彰化</button>
+                </div>
+            </div>
+
+            <!-- 主題分類 -->
+            <div class="filter-section">
+                <div class="filter-section-title">主題分類</div>
+                <div class="tag-group" id="theme-tags">
+                    <button class="tag-btn has-icon" data-theme="戶外" onclick="toggleTag(this)">🏔️ 戶外</button>
+                    <button class="tag-btn has-icon" data-theme="手作" onclick="toggleTag(this)">🎨 手作</button>
+                    <button class="tag-btn has-icon" data-theme="美食" onclick="toggleTag(this)">🍜 美食</button>
+                    <button class="tag-btn has-icon" data-theme="文化" onclick="toggleTag(this)">🏛️ 文化</button>
+                </div>
+            </div>
+
+            <!-- 時間 -->
+            <div class="filter-section">
+                <div class="filter-section-title">時間</div>
+                <div class="tag-group" id="time-tags">
+                    <button class="tag-btn" onclick="toggleTag(this)">2小時</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">3小時</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">4小時</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">半天</button>
+                    <button class="tag-btn" onclick="toggleTag(this)">全天</button>
+                </div>
+            </div>
+
+            <!-- 價格範圍 -->
+            <div class="filter-section">
+                <div class="filter-section-title">價格範圍（NT$）</div>
+                <div class="price-range">
+                    <input class="price-input" type="number" placeholder="最低" id="price-min" />
+                    <span class="price-sep">—</span>
+                    <input class="price-input" type="number" placeholder="最高" id="price-max" />
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== 右側主要區域 ===== -->
+        <main class="explore-main">
+
+            <!-- 工具列：結果數 + 排序 -->
+            <div class="explore-toolbar">
+                <div class="result-count">共找到 <strong id="count">12</strong> 個體驗</div>
+                <select class="sort-select" id="sort-select">
+                    <option>預設排序</option>
+                    <option>價格：低到高</option>
+                    <option>價格：高到低</option>
+                    <option>評分最高</option>
+                    <option>最多評論</option>
+                </select>
+            </div>
+
+            <!-- 卡片網格 -->
+            <div class="cards-grid" id="cards-grid">
+
+                <!-- Card 1 -->
+                <div class="card" data-region="台北" data-theme="戶外" data-time="半天" data-price="1800">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75" alt="木升探險"
+                            loading="lazy" />
+                        <div class="card-badge">戶外冒險</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">戶外冒險</div>
+                        <div class="card-title">清水斷崖獨木舟探險</div>
+                        <div class="card-meta">
+                            <span>花蓮</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$1,800 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(312)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card" data-region="新北" data-theme="手作" data-time="3小時" data-price="980">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=75" alt="陶藝"
+                            loading="lazy" />
+                        <div class="card-badge">手作工藝</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">手作工藝</div>
+                        <div class="card-title">九份老街手捏陶藝體驗</div>
+                        <div class="card-meta">
+                            <span>新北</span>
+                            <div class="dot"></div><span>3小時</span>
+                        </div>
+                        <div class="card-price">NT$980 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(205)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card" data-region="台中" data-theme="美食" data-time="4小時" data-price="1500">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=75" alt="料理課"
+                            loading="lazy" />
+                        <div class="card-badge">美食料理</div>
+                        <button class="card-fav liked" onclick="toggleFav(this)">♥</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">美食料理</div>
+                        <div class="card-title">台中市場私廚料理課</div>
+                        <div class="card-meta">
+                            <span>台中</span>
+                            <div class="dot"></div><span>4小時</span>
+                        </div>
+                        <div class="card-price">NT$1,500 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(189)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="card" data-region="嘉義" data-theme="戶外" data-time="全天" data-price="2200">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=600&q=75" alt="阿里山"
+                            loading="lazy" />
+                        <div class="card-badge">自然探索</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">自然探索</div>
+                        <div class="card-title">阿里山日出觀星嚮導</div>
+                        <div class="card-meta">
+                            <span>嘉義</span>
+                            <div class="dot"></div><span>全天</span>
+                        </div>
+                        <div class="card-price">NT$2,200 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(98)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="card" data-region="新北" data-theme="手作" data-time="4小時" data-price="1200">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=75" alt="藍染"
+                            loading="lazy" />
+                        <div class="card-badge">手作工藝</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">手作工藝</div>
+                        <div class="card-title">淡水老街藍染拼布工作坊</div>
+                        <div class="card-meta">
+                            <span>新北</span>
+                            <div class="dot"></div><span>3小時</span>
+                        </div>
+                        <div class="card-price">NT$1,200 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(147)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="card" data-region="台南" data-theme="文化" data-time="半天" data-price="800">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75" alt="古蹟"
+                            loading="lazy" />
+                        <div class="card-badge">文化歷史</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">文化歷史</div>
+                        <div class="card-title">台南府城古蹟深度導覽</div>
+                        <div class="card-meta">
+                            <span>台南</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$800 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(261)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7 -->
+                <div class="card" data-region="宜蘭" data-theme="戶外" data-time="半天" data-price="1100">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75" alt="農場"
+                            loading="lazy" />
+                        <div class="card-badge">自然探索</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">自然探索</div>
+                        <div class="card-title">宜蘭梯田生態農場體驗</div>
+                        <div class="card-meta">
+                            <span>宜蘭</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$1,100 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(173)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 8 -->
+                <div class="card" data-region="高雄" data-theme="美食" data-time="4小時" data-price="1350">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="海鮮"
+                            loading="lazy" />
+                        <div class="card-badge">美食料理</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">美食料理</div>
+                        <div class="card-title">高雄漁港老漁料理日</div>
+                        <div class="card-meta">
+                            <span>高雄</span>
+                            <div class="dot"></div><span>4小時</span>
+                        </div>
+                        <div class="card-price">NT$1,350 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(142)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 9 -->
+                <div class="card" data-region="花蓮" data-theme="戶外" data-time="全天" data-price="2500">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1434725039720-aaad6dd32dfe?w=600&q=75" alt="峽谷"
+                            loading="lazy" />
+                        <div class="card-badge">戶外冒險</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">戶外冒險</div>
+                        <div class="card-title">太魯閣峽谷健行之旅</div>
+                        <div class="card-meta">
+                            <span>花蓮</span>
+                            <div class="dot"></div><span>全天</span>
+                        </div>
+                        <div class="card-price">NT$2,500 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(287)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 10 -->
+                <div class="card" data-region="彰化" data-theme="文化" data-time="2小時" data-price="700">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600&q=75" alt="鐵道"
+                            loading="lazy" />
+                        <div class="card-badge">文化歷史</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">文化歷史</div>
+                        <div class="card-title">彰化扇形車庫鐵道文化探索</div>
+                        <div class="card-meta">
+                            <span>彰化</span>
+                            <div class="dot"></div><span>2小時</span>
+                        </div>
+                        <div class="card-price">NT$700 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(118)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 11 -->
+                <div class="card" data-region="屏東" data-theme="戶外" data-time="半天" data-price="1650">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1682686580391-615b1f28e5ee?w=600&q=75" alt="潛水"
+                            loading="lazy" />
+                        <div class="card-badge">戶外冒險</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">戶外冒險</div>
+                        <div class="card-title">墾丁珊瑚礁浮潛體驗</div>
+                        <div class="card-meta">
+                            <span>屏東</span>
+                            <div class="dot"></div><span>半天</span>
+                        </div>
+                        <div class="card-price">NT$1,650 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(234)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 12 -->
+                <div class="card" data-region="台北" data-theme="文化" data-time="2小時" data-price="1200">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1545315003-c5ad6226c272?w=600&q=75" alt="茶道"
+                            loading="lazy" />
+                        <div class="card-badge">文化歷史</div>
+                        <button class="card-fav" onclick="toggleFav(this)">♡</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-type">文化歷史</div>
+                        <div class="card-title">台北茶道文化靜心體驗</div>
+                        <div class="card-meta">
+                            <span>台北</span>
+                            <div class="dot"></div><span>2小時</span>
+                        </div>
+                        <div class="card-price">NT$1,200 <span>/ 人起</span></div>
+                        <div class="card-rating">
+                            <span class="stars">★★★★½</span>
+                            <span class="rating-count">(196)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end cards-grid -->
+        </main>
+    </div><!-- end explore-wrapper -->
+
+    <!-- ====== FOOTER ====== -->
+    
+
+    <!-- ====== JavaScript：篩選互動邏輯 ====== --></div>
+<div id="view-about" class="view"><!-- ABOUT HERO -->
+  <section class="about-hero">
+    <div class="about-hero-decoration"></div>
+    <div class="about-hero-content reveal">
+      <div class="section-eyebrow">OUR STORY</div>
+      <h1>
+        我們相信，<br>
+        旅行是一種<span class="accent">真實相遇</span>
+      </h1>
+      <p>從一次花蓮的獨木舟之旅開始，我們看見了台灣每一個角落裡，都有值得被看見的人與故事。島嶼旅跡，就從這裡出發。</p>
+    </div>
+  </section>
+
+  <!-- BRAND STORY -->
+  <section class="brand-story">
+    <div class="brand-story-inner">
+      <div class="brand-story-img reveal">
+        <img
+          src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800&q=80"
+          alt="花蓮日落美景"
+          loading="lazy"
+        />
+      </div>
+      <div class="brand-story-text reveal reveal-delay-1">
+        <div class="section-eyebrow">BRAND STORY</div>
+        <h2>從一次迷路開始的創業</h2>
+        <p>2019 年，創辦人阿峰在花蓮租了一艘獨木舟，卻意外划進一條沒有標示的秘湖。當地的漁民老伯帶著他，用台語講述這片湖的故事。那一刻，他明白了：最珍貴的旅行體驗，不在照片點上。</p>
+        <p>島嶼旅跡於 2020 年成立，致力於連結在地嚮導與每一位渴望深度旅遊的旅人。我們的嚮導不只是帶路人，他們是故事的守護者。</p>
+        <p>今天，我們在台灣 22 個縣市有超過 150 位認證嚮導，服務超過三萬名來自世界各地的旅客，讓每一段旅程都成為值得述說的故事。</p>
+        <a href="#" class="btn-primary">探索所有體驗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE VALUES -->
+  <section class="core-values">
+    <div class="section-eyebrow reveal">CORE VALUES</div>
+    <div class="section-title reveal">我們的三個承諾</div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <span class="value-icon">🌱</span>
+        <h3>在地深度，不走馬看花</h3>
+        <p>每一個體驗都由在地嚮導親心設計，帶你看見最少人看見的台灣。我們的嚮導製點上，只提供真正深入在地生活的體驗。</p>
+      </div>
+      <div class="value-card reveal reveal-delay-1">
+        <span class="value-icon">🛡️</span>
+        <h3>安全保障，安心出發</h3>
+        <p>所有嚮導都通過嚴格資格背景認證、並持有相關專業認照，我們提供全程協助保障，讓你安心且感心出發在體驗上，不用擔心其他。</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <span class="value-icon">🌿</span>
+        <h3>綠色永續，守護這片土地</h3>
+        <p>每筆訂單抽取 5% 將捐入台灣環境保育基金。我們的體驗設計以低衝擊為原則，與自然共存，讓下一代的旅人也能看見同樣美麗的台灣。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEET THE TEAM -->
+  <section class="team-section">
+    <div class="section-eyebrow reveal">MEET THE TEAM</div>
+    <div class="section-title reveal">讓旅行成真的人們</div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <img
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
+          alt="陳建峰"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">創辦人</div>
+          <div class="team-card-name">陳建峰</div>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-1">
+        <img
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80"
+          alt="林芷庭"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">共同創辦人，營運總監</div>
+          <div class="team-card-name">林芷庭</div>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <img
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80"
+          alt="黃俊宏"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">技術總監</div>
+          <div class="team-card-name">黃俊宏</div>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-3">
+        <img
+          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80"
+          alt="許雅婷"
+          loading="lazy"
+        />
+        <div class="team-card-overlay"></div>
+        <div class="team-card-info">
+          <div class="team-card-role">品牌策略</div>
+          <div class="team-card-name">許雅婷</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BY THE NUMBERS -->
+  <section class="numbers-section">
+    <div class="section-eyebrow">BY THE NUMBERS</div>
+    <div class="numbers-grid">
+      <div class="number-item reveal">
+        <div class="number-value">30,000<span class="accent">+</span></div>
+        <div class="number-label">服務旅客人數</div>
+      </div>
+      <div class="number-item reveal reveal-delay-1">
+        <div class="number-value">150<span class="accent">+</span></div>
+        <div class="number-label">認證在地嚮導</div>
+      </div>
+      <div class="number-item reveal reveal-delay-2">
+        <div class="number-value">200<span class="accent">+</span></div>
+        <div class="number-label">精選體驗項目</div>
+      </div>
+      <div class="number-item reveal reveal-delay-3">
+        <div class="number-value">98<span class="accent">%</span></div>
+        <div class="number-label">旅客滿意度</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER --></div>
+<div id="view-faq" class="view"><main>
+
+    <!-- FAQ HERO -->
+    <div class="faq-hero">
+      <div class="faq-hero-eyebrow">FAQ</div>
+      <h1>常見問題解答</h1>
+      <p>找不到答案？歡迎直接聯絡我們的客服團隊。</p>
+    </div>
+
+    <!-- FAQ CONTENT -->
+    <div class="faq-content">
+
+      <!-- TABS -->
+      <div class="faq-tabs">
+        <button class="tab-btn active" data-target="booking">預訂問題</button>
+        <button class="tab-btn" data-target="refund">退款政策</button>
+        <button class="tab-btn" data-target="experience">體驗當日</button>
+        <button class="tab-btn" data-target="payment">帳號與付款</button>
+      </div>
+
+      <!-- SECTION: 預訂問題 -->
+      <div class="faq-section active" id="booking">
+        <div class="faq-section-title">
+          <span class="section-icon">🗓️</span> 預訂問題
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header open" onclick="toggleAccordion(this)">
+            <span class="accordion-question">如何預訂體驗？</span>
+            <span class="accordion-icon">✕</span>
+          </div>
+          <div class="accordion-body open">
+            <p>在體驗詳情頁選擇日期與人數，點擊「立刻預訂」後，填寫聯絡資料並完成付款即可。完成後系統會自動寄送確認 Email 到您的信箱，請注意查收。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">最少需要幾人才能成團？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>各體驗的最低成團人數不同，請在體驗詳情頁查看相關說明。通常 1–2 人即可成團，部分特殊體驗可能需要最低 3 人。若成團人數不足，我們會提前 3 天通知您並安排退款或改期。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">可以替他人代訂體驗嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>可以！您可以為親友代訂體驗，填寫聯絡資料時請填寫實際參加者的姓名與聯絡電話，以便嚮導在當天確認身份。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">預訂後可以修改日期嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>可以，在體驗日期前 72 小時內均可免費改期一次。請登入會員中心，進入「我的訂單」頁面操作，或聯絡客服協助處理。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 退款政策 -->
+      <div class="faq-section" id="refund">
+        <div class="faq-section-title">
+          <span class="section-icon">💳</span> 退款政策
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">如何申請退款？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>請登入會員中心，進入「我的訂單」頁面，選擇要取消的訂單後點選「申請退款」。退款金額將依照取消時間點計算，通常於 5–7 個工作天內退回原付款帳戶。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">退款的時間政策是什麼？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>體驗開始前 7 天以上取消：全額退款。體驗前 3–7 天取消：退款 50%。體驗前 3 天內取消：不予退款。如遇颱風或不可抗力因素，將另行評估全額退款。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">嚮導取消體驗時我可以退款嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>若嚮導因故取消體驗，我們將全額退款給您，並優先協助安排相似的替代體驗。我們會在取消後 24 小時內主動與您聯繫。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 體驗當日 -->
+      <div class="faq-section" id="experience">
+        <div class="faq-section-title">
+          <span class="section-icon">🗺️</span> 體驗當日
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">我需要提前多久抵達集合地點？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>建議您提前 10–15 分鐘抵達集合地點，讓嚮導有足夠時間確認人數並進行行前說明。集合地點與時間將於確認 Email 中詳細說明。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">體驗需要攜帶什麼？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>不同體驗的裝備需求不同，請參考各體驗頁面的「注意事項」欄位。一般建議攜帶：個人證件、舒適的服裝與鞋子、飲用水，以及防曬用品（戶外體驗）。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">下雨天體驗還會舉辦嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>一般室內體驗不受天氣影響。戶外體驗遇小雨通常照常進行，嚮導將視當天天氣狀況判斷是否調整行程。若遇颱風等惡劣天氣，我們會主動聯繫您安排改期或退款。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 帳號與付款 -->
+      <div class="faq-section" id="payment">
+        <div class="faq-section-title">
+          <span class="section-icon">🔐</span> 帳號與付款
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">支援哪些付款方式？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>目前支援信用卡（Visa、MasterCard、JCB）、LINE Pay、街口支付，以及銀行轉帳。所有付款流程均採 SSL 加密保護，安全有保障。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">我可以索取發票嗎？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>可以，付款完成後我們將自動開立電子發票並寄送至您的 Email。如需統編發票，請在結帳時填寫公司統一編號與抬頭。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="accordion-question">如何重設密碼？</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-body">
+            <p>請點選登入頁面的「忘記密碼」，輸入您的註冊 Email 後，系統將寄送重設密碼連結至您的信箱。連結有效時間為 30 分鐘，請盡快完成操作。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT CARD -->
+      <div class="contact-card">
+        <h3>還有其他問題？</h3>
+        <p>我們的客服團隊週一到週五 09:00–18:00 線上為您解答</p>
+        <div class="contact-actions">
+          <button class="btn-primary">
+            ✉ 寄信給我們
+          </button>
+          <button class="btn-outline-dark">
+            💬 即時客服
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER --></div>
+<div id="view-profile" class="view"><!-- ===================== PROFILE PAGE ===================== -->
+  <div class="profile-page">
+    <div class="profile-container">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="profile-card">
+          <div class="avatar-wrap">
+            <img class="avatar"
+              src="https://i.pravatar.cc/150?img=47"
+              alt="旅遊達人" />
+            <div class="avatar-edit">✎</div>
+          </div>
+          <div class="profile-name">旅遊達人</div>
+          <div class="profile-email">demo@islandtrace.tw</div>
+          <div class="member-badge">
+            <span class="star">★</span> 探險會員
+          </div>
+        </div>
+
+        <div class="sidebar-menu">
+          <div class="menu-item active" onclick="switchTab('orders')">
+            <span class="menu-icon">📋</span>
+            訂單紀錄
+          </div>
+          <div class="menu-item" onclick="switchTab('favorites')">
+            <span class="menu-icon">❤️</span>
+            我的收藏
+          </div>
+          <div class="menu-item" onclick="switchTab('profile')">
+            <span class="menu-icon">👤</span>
+            個人資料
+          </div>
+          <div class="menu-item logout" onclick="handleLogout()">
+            <span class="menu-icon">🚪</span>
+            登出
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="main-content">
+
+        <!-- Orders Panel -->
+        <div id="panel-orders">
+          <div class="content-title">訂單紀錄</div>
+          <div class="order-table-wrap">
+
+            <!-- Table header -->
+            <div class="order-table-head">
+              <div>體驗</div>
+              <div>日期 / 場次</div>
+              <div>金額</div>
+              <div>狀態</div>
+              <div></div>
+            </div>
+
+            <!-- Row 1 -->
+            <div class="order-row">
+              <div class="order-exp">
+                <img class="order-exp-img"
+                  src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=200&q=75"
+                  alt="清水斷崖獨木舟探陰" />
+                <div class="order-exp-info">
+                  <div class="order-exp-name">清水斷崖獨木舟探險</div>
+                  <div class="order-exp-location">
+                    <span class="location-dot"></span>
+                    花蓮
+                  </div>
+                </div>
+              </div>
+              <div class="order-date">
+                2025/7/15<br>
+                上午場 09:00
+              </div>
+              <div class="order-price">NT$1,800</div>
+              <div>
+                <span class="status-badge upcoming">未出發</span>
+              </div>
+              <div>
+                <button class="btn-cancel" onclick="cancelOrder(this)">取消訂單</button>
+              </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="order-row">
+              <div class="order-exp">
+                <img class="order-exp-img"
+                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=200&q=75"
+                  alt="淡水老街藍染拼布工作坊" />
+                <div class="order-exp-info">
+                  <div class="order-exp-name">淡水老街藍染拼布工作坊</div>
+                  <div class="order-exp-location">
+                    <span class="location-dot"></span>
+                    新北
+                  </div>
+                </div>
+              </div>
+              <div class="order-date">
+                2025/5/20<br>
+                下午場 14:00
+              </div>
+              <div class="order-price">NT$1,200</div>
+              <div>
+                <span class="status-badge completed">已完成</span>
+              </div>
+              <div></div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="order-row">
+              <div class="order-exp">
+                <img class="order-exp-img"
+                  src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=200&q=75"
+                  alt="九份老街手作陶藝體驗" />
+                <div class="order-exp-info">
+                  <div class="order-exp-name">九份老街手作陶藝體驗</div>
+                  <div class="order-exp-location">
+                    <span class="location-dot"></span>
+                    新北
+                  </div>
+                </div>
+              </div>
+              <div class="order-date">
+                2025/4/12<br>
+                上午場 10:00
+              </div>
+              <div class="order-price">NT$980</div>
+              <div>
+                <span class="status-badge completed">已完成</span>
+              </div>
+              <div></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Favorites Panel (hidden) -->
+        <div id="panel-favorites" style="display:none;">
+          <div class="content-title">我的收藏</div>
+          <div style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:60px; text-align:center; color:var(--text-muted);">
+            <div style="font-size:36px; margin-bottom:14px;">❤️</div>
+            <div style="font-size:14px;">還沒有收藏的體驗</div>
+            <div style="font-size:12px; margin-top:6px;">去探索你喜歡的體驗，點擊心型圖示即可收藏</div>
+          </div>
+        </div>
+
+        <!-- Profile Panel (hidden) -->
+        <div id="panel-profile" style="display:none;">
+          <div class="content-title">個人資料</div>
+          <div style="background:#fff; border-radius:16px; border:1px solid var(--border); padding:32px; display:flex; flex-direction:column; gap:20px;">
+
+            <div>
+              <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">姓名</label>
+              <input value="旅遊達人" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:var(--sans); outline:none; transition:border-color .2s;"
+                onfocus="this.style.borderColor='var(--orange)'"
+                onblur="this.style.borderColor='var(--border)'" />
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">電子信箱</label>
+              <input value="demo@islandtrace.tw" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:var(--sans); outline:none; transition:border-color .2s;"
+                onfocus="this.style.borderColor='var(--orange)'"
+                onblur="this.style.borderColor='var(--border)'" />
+            </div>
+
+            <div>
+              <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">手機號碼</label>
+              <input placeholder="請輸入手機號碼" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:var(--sans); outline:none; transition:border-color .2s;"
+                onfocus="this.style.borderColor='var(--orange)'"
+                onblur="this.style.borderColor='var(--border)'" />
+            </div>
+
+            <button onclick="saveProfile()" style="align-self:flex-start; background:var(--orange); color:#fff; border:none; border-radius:24px; padding:11px 28px; font-size:14px; font-weight:500; font-family:var(--sans); cursor:pointer; transition:background .2s;"
+              onmouseover="this.style.background='var(--orange-light)'"
+              onmouseout="this.style.background='var(--orange)'">
+              儲存變更
+            </button>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== FOOTER ===================== --></div>
+<div id="view-login" class="view"><div class="page">
+  <div class="hero">    <div class="hero__photo"></div>
+    <div class="hero__logo">島嶼旅跡<span class="dot"></span></div>
+    <div class="hero__copy">
+      <p class="hero__tagline">每一趟旅程，<br>儲存成<span class="accent">全新的自己</span></p>
+      <p class="hero__sub">加入島嶼旅跡，開啟你的台灣深度之旅</p>
+    </div>  </div>
+  <div class="form-panel">    <div class="form-inner">
+      <div class="tabs" role="tablist">
+        <button class="tab active" role="tab" aria-selected="true" id="tab-login" onclick="switchTab('login')">登入</button>
+        <button class="tab" role="tab" aria-selected="false" id="tab-register" onclick="switchTab('register')">註冊</button>
+      </div>
+      <div id="panel-login">
+        <h1 class="welcome-heading">歡迎回來 👋</h1>
+        <p class="welcome-sub">登入帳號以管理你的旅行體驗</p>
+        <div class="field">          <label for="email">電子信箱</label>
+          <div class="input-wrap">
+            <input type="email" id="email" placeholder="your@email.com" autocomplete="email" />
+          </div>        </div>
+        <div class="field">          <label for="password">密碼</label>
+          <div class="input-wrap">            <input type="password" id="password" placeholder="輸入密碼" autocomplete="current-password" />
+            <button class="toggle-pw" onclick="togglePw()" aria-label="顯示／隱藏密碼" type="button">
+              <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>                <circle cx="12" cy="12" r="3"/>
+              </svg>            </button>          </div>          <div class="forgot-row"><a href="#">忘記密碼？</a></div>        </div>
+        <button class="btn-primary" id="btn-login-submit">登入</button>
+        <div class="divider">或使用</div>
+        <button class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg> 使用 Google 帳號登入        </button>
+        <button class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg> 使用 Facebook 帳號登入        </button>
+        <p class="register-row">還沒有帳號？<a href="#" onclick="switchTab('register'); return false;">點此免費註冊</a></p>      </div>
+      <div id="panel-register" style="display:none;">
+        <h1 class="welcome-heading">建立帳號 ✈️</h1>
+        <p class="welcome-sub">免費加入，開啟你的台灣深度旅行</p>
+        <div class="field">          <label for="reg-name">姓名</label>
+          <div class="input-wrap">            <input type="text" id="reg-name" placeholder="你的姓名" autocomplete="name" />
+          </div>        </div>
+        <div class="field">          <label for="reg-email">電子信箱</label>
+          <div class="input-wrap">            <input type="email" id="reg-email" placeholder="your@email.com" autocomplete="email" />
+          </div>        </div>
+        <div class="field">          <label for="reg-password">密碼</label>
+          <div class="input-wrap">            <input type="password" id="reg-password" placeholder="設定密碼（至少 8 位）" autocomplete="new-password" />
+          </div>        </div>
+        <button class="btn-primary" id="btn-reg-submit">免費註冊</button>
+        <div class="divider">或使用</div>
+        <button class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg> 使用 Google 帳號註冊        </button>
+        <p class="register-row">已有帳號？<a href="#" onclick="switchTab('login'); return false;">立即登入</a></p>      </div>    </div>  </div></div></div>
+<div id="view-detail" class="view"><!-- ====== 麵包屑 ====== -->
+    <div class="breadcrumb">
+        <a href="#" data-go="index">首頁</a>
+        <span class="sep">›</span>
+        <a href="#" data-go="products">探索體驗</a>
+        <span class="sep">›</span>
+        <span class="current">清水斷崖獨木舟探險</span>
+    </div>
+
+    <!-- ====== 主內容：左側商品介紹 + 右側訂購卡 ====== -->
+    <div class="detail-wrapper">
+
+        <!-- ===== 左側：商品介紹 ===== -->
+        <main class="detail-main">
+
+            <!-- 圖片畫廊 -->
+            <div class="gallery-main">
+                <img id="main-image" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+                    alt="清水斷崖獨木舟探險" />
+            </div>
+            <div class="gallery-thumbs">
+                <div class="thumb active"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=75" alt="縮圖1" />
+                </div>
+                <div class="thumb"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=200&q=75" alt="縮圖2" />
+                </div>
+                <div class="thumb"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=200&q=75" alt="縮圖3" />
+                </div>
+                <div class="thumb"
+                    onclick="changeImage(this, 'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80')">
+                    <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=200&q=75" alt="縮圖4" />
+                </div>
+            </div>
+
+            <!-- 標題與基本資訊 -->
+            <h1 class="product-title">清水斷崖獨木舟探險</h1>
+            <div class="product-meta">
+                <span>📍 花蓮</span>
+                <span>⏱ 半天</span>
+                <span>🏷 戶外冒險</span>
+                <span class="stars">★★★★</span>
+                <span><strong>4.9</strong>（312 則評論）</span>
+            </div>
+
+            <!-- 體驗介紹 -->
+            <section class="detail-section">
+                <h2 class="section-title">體驗介紹</h2>
+                <p class="section-desc">
+                    這是一場深入花蓮在地生活的難忘體驗。由當地資深嚮導親自帶領，您將突破一般觀光行程的框架，真正感受這片土地的靈魂與韻味。無論您是第一次探索台灣，或是熟悉這座島嶼的旅人，這場體驗都將讓您看見截然不同的風景。
+                </p>
+            </section>
+
+            <!-- 行程亮點 -->
+            <section class="detail-section">
+                <h2 class="section-title">✦ 行程亮點</h2>
+                <ul class="highlight-list">
+                    <li><span class="hl-icon">✦</span>深入探索花蓮最具代表性的自然與人文景觀</li>
+                    <li><span class="hl-icon">✦</span>由在地認證嚮導全程帶領，分享第一手在地故事</li>
+                    <li><span class="hl-icon">✦</span>小班制體驗（最多 8 人），確保每位旅客都獲得充分關注</li>
+                    <li><span class="hl-icon">✦</span>適合各年齡層，無需特殊技能或體力即可參與</li>
+                    <li><span class="hl-icon">✦</span>體驗結束後提供精美電子紀念照片供旅客珍藏</li>
+                </ul>
+            </section>
+
+            <!-- 費用說明 -->
+            <section class="detail-section">
+                <h2 class="section-title">費用說明</h2>
+                <div class="fee-grid">
+                    <div class="fee-box included">
+                        <h4>✅ 費用包含</h4>
+                        <ul>
+                            <li>專業嚮導帶領全程</li>
+                            <li>相關活動器材與裝備</li>
+                            <li>旅遊責任保險</li>
+                            <li>體驗結束後的紀念照片</li>
+                        </ul>
+                    </div>
+                    <div class="fee-box excluded">
+                        <h4>❌ 費用不包含</h4>
+                        <ul>
+                            <li>交通費用（往返集合點）</li>
+                            <li>個人餐飲費用</li>
+                            <li>個人旅遊保險</li>
+                            <li>額外自費項目</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 旅客評論 -->
+            <section class="detail-section">
+                <h2 class="section-title">旅客評論</h2>
+
+                <div class="review">
+                    <img class="review-avatar"
+                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=75" alt="林小美" />
+                    <div class="review-body">
+                        <span class="review-name">林小美</span><span class="review-date">2025.04</span>
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">非常棒的體驗！嚮導超級專業又親切，讓我們玩得非常開心。強烈推薦給所有想要深度認識台灣的朋友！</p>
+                    </div>
+                </div>
+
+                <div class="review">
+                    <img class="review-avatar"
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=75" alt="王大明" />
+                    <div class="review-body">
+                        <span class="review-name">王大明</span><span class="review-date">2025.03</span>
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">這是我今年最難忘的體驗之一，感謝嚮導分享了很多在地故事，讓整個旅程充滿意義。下次一定還要再來！</p>
+                    </div>
+                </div>
+
+                <div class="review">
+                    <img class="review-avatar"
+                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=75" alt="Kenji Y." />
+                    <div class="review-body">
+                        <span class="review-name">Kenji Y.</span><span class="review-date">2025.02</span>
+                        <div class="review-stars">★★★★</div>
+                        <p class="review-text">來自日本的我，透過這次體驗更加認識了台灣的美。嚮導的英文解說也很流暢，真的很棒的安排。</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ===== 右側：訂購卡（固定顯示在畫面上，跟著捲動） ===== -->
+        <aside class="booking-card">
+            <div>
+                <span class="price-now" id="unit-price-display">NT$ 1,800</span>
+                <span class="price-unit"> / 人起</span>
+            </div>
+
+            <div class="rating-row">
+                <span class="stars">★★★★</span>
+                <strong>4.9</strong>
+                <span>(312)</span>
+            </div>
+
+            <div class="qty-row">
+                <span>參加人數</span>
+                <div class="qty-control">
+                    <button class="qty-btn" id="btn-minus" onclick="decreaseQty()">−</button>
+                    <span class="qty-num" id="qty-num">1</span>
+                    <button class="qty-btn" id="btn-plus" onclick="increaseQty()">＋</button>
+                </div>
+            </div>
+
+            <div class="total-row">
+                <span>總金額</span>
+                <span class="total-amount" id="total-amount">NT$ 1,800</span>
+            </div>
+
+            <button class="book-btn" id="btn-book-now">立刻預訂</button>
+
+            <div class="booking-note">🔒 安全付款　·　免費取消（7天前）</div>
+        </aside>
+
+    </div><!-- end detail-wrapper --></div>
+<div id="view-booking" class="view"><!-- ==================== STEP 1 ==================== -->
+  <div id="page-step1" class="booking-page active">
+
+    <!-- Stepper -->
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item active" id="s1-dot1">
+          <div class="step-circle">1</div>
+          <div class="step-label">選擇日期</div>
+        </div>
+        <div class="step-line" id="s1-line1"></div>
+        <div class="step-item" id="s1-dot2">
+          <div class="step-circle">2</div>
+          <div class="step-label">填寫資料</div>
+        </div>
+        <div class="step-line" id="s1-line2"></div>
+        <div class="step-item" id="s1-dot3">
+          <div class="step-circle">3</div>
+          <div class="step-label">預訂完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="booking-body">
+      <div class="booking-card-inner">
+
+        <!-- Calendar -->
+        <div class="calendar-header">
+          <button class="cal-nav" id="cal-prev">‹</button>
+          <div class="cal-month" id="cal-title"></div>
+          <button class="cal-nav" id="cal-next">›</button>
+        </div>
+
+        <div class="calendar-grid" id="cal-grid">
+          <div class="cal-dow">日</div>
+          <div class="cal-dow">一</div>
+          <div class="cal-dow">二</div>
+          <div class="cal-dow">三</div>
+          <div class="cal-dow">四</div>
+          <div class="cal-dow">五</div>
+          <div class="cal-dow">六</div>
+        </div>
+
+        <!-- Session -->
+        <div class="session-label">選擇場次</div>
+        <div class="session-grid">
+          <button class="session-btn" id="sess-am" onclick="selectSession('am')">
+            <div class="time">09:00</div>
+            <div class="tag"><span class="dot dot-am"></span>上午場</div>
+          </button>
+          <button class="session-btn" id="sess-pm" onclick="selectSession('pm')">
+            <div class="time">14:00</div>
+            <div class="tag"><span class="dot dot-pm"></span>下午場</div>
+          </button>
+        </div>
+
+        <button class="next-btn" id="step1-next" disabled onclick="goToStep2()">
+          下一步：填寫旅客資料 →
+        </button>
+
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-card" style="grid-row: 1; position: sticky; top: 80px;">
+        <h3>預訂摘要</h3>
+        <img class="summary-img"
+          src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=500&q=75"
+          alt="清水斷崖獨木舟探險" />
+        <div class="summary-name">清水斷崖獨木舟探險</div>
+        <div class="summary-row">
+          <span class="label">目的地</span>
+          <span class="value">花蓮</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">時間長度</span>
+          <span class="value">半天</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">選擇日期</span>
+          <span class="value pending" id="s1-date-disp">尚未選擇</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">選擇場次</span>
+          <span class="value pending" id="s1-sess-disp">尚未選擇</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">價格</span>
+          <span class="value price">NT$ 1,800 / 人</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 2 ==================== -->
+  <div id="page-step2" class="booking-page">
+
+    <!-- Stepper -->
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item done">
+          <div class="step-circle">✓</div>
+          <div class="step-label">選擇日期</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item active">
+          <div class="step-circle">2</div>
+          <div class="step-label">填寫資料</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+          <div class="step-circle">3</div>
+          <div class="step-label">預訂完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="booking-body">
+
+      <div>
+        <!-- Contact -->
+        <div class="booking-card-inner" style="margin-bottom: 20px;">
+          <div class="card-section-title"><span class="icon">👤</span> 聯絡人資料</div>
+
+          <div class="form-row">
+            <div class="form-group" id="fg-name">
+              <label>姓名 <span class="req">*</span></label>
+              <input class="form-input" type="text" id="inp-name" placeholder="請輸入真實姓名" />
+              <span class="error-msg">請填寫姓名</span>
+            </div>
+            <div class="form-group" id="fg-phone">
+              <label>手機號碼 <span class="req">*</span></label>
+              <input class="form-input" type="tel" id="inp-phone" placeholder="09XX-XXX-XXX" />
+              <span class="error-msg">請填寫有效手機號碼</span>
+            </div>
+          </div>
+
+          <div class="form-group" id="fg-email">
+            <label>電子信箱 <span class="req">*</span></label>
+            <input class="form-input" type="email" id="inp-email" placeholder="your@email.com" />
+            <span class="error-msg">請填寫有效電子信箱</span>
+          </div>
+
+          <div class="form-group">
+            <label>備註（選填）</label>
+            <textarea class="form-input" placeholder="有任何特殊需求或問題，請在此告知嚮導…"></textarea>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="booking-card-inner">
+          <div class="card-section-title"><span class="icon">💳</span> 付款方式</div>
+
+          <div class="pay-options">
+            <div class="pay-option selected" id="pay-cc" onclick="selectPay('cc')">
+              <div class="pay-icon cc">VISA</div>
+              <div class="pay-info">
+                <div class="name">信用卡 / 金融卡</div>
+                <div class="sub">VISA · MasterCard · JCB</div>
+              </div>
+            </div>
+            <div class="pay-option" id="pay-line" onclick="selectPay('line')">
+              <div class="pay-icon line">L</div>
+              <div class="pay-info">
+                <div class="name">LINE Pay</div>
+                <div class="sub">快捷、安全的行動支付</div>
+              </div>
+            </div>
+            <div class="pay-option" id="pay-apple" onclick="selectPay('apple')">
+              <div class="pay-icon apple">🍎</div>
+              <div class="pay-info">
+                <div class="name">Apple Pay</div>
+                <div class="sub">Face ID / Touch ID 快速付款</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CC fields -->
+          <div id="cc-fields" class="show">
+            <div class="form-group" id="fg-ccnum">
+              <label>卡號 <span class="req">*</span></label>
+              <input class="form-input" type="text" id="inp-ccnum" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" />
+              <span class="error-msg">請填寫信用卡卡號</span>
+            </div>
+            <div class="cc-row">
+              <div class="form-group" id="fg-ccexp">
+                <label>有效期限 <span class="req">*</span></label>
+                <input class="form-input" type="text" id="inp-ccexp" placeholder="MM/YY" maxlength="5" />
+                <span class="error-msg">請填寫有效期限</span>
+              </div>
+              <div class="form-group" id="fg-cccvv">
+                <label>安全碼 <span class="req">*</span></label>
+                <input class="form-input" type="text" id="inp-cccvv" placeholder="CVV" maxlength="4" />
+                <span class="error-msg">請填寫安全碼</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="confirm-btn" id="confirm-btn" onclick="validateAndConfirm()">
+            確認預訂並付款 🔒
+          </button>
+          <p class="confirm-note">
+            點擊後即代表您同意我們的<a href="#">服務條款</a>與<a href="#">隱私政策</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Summary right col -->
+      <div class="summary-card" style="position: sticky; top: 80px;">
+        <h3>訂單摘要</h3>
+        <img class="summary-img"
+          src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=500&q=75"
+          alt="清水斷崖獨木舟探險" />
+        <div class="summary-name">清水斷崖獨木舟探險</div>
+        <div class="summary-row">
+          <span class="label">日期</span>
+          <span class="value" id="s2-date-disp">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">場次</span>
+          <span class="value" id="s2-sess-disp">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">人數</span>
+          <span class="value">1 人</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">總金額</span>
+          <span class="value price">NT$ 1,800</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== SUCCESS ==================== -->
+  <div id="page-success" class="booking-page">
+    <!-- confetti bg -->
+    <div class="success-page">
+      <div class="confetti-wrap" id="confetti"></div>
+
+      <!-- stepper -->
+      <div class="success-stepper">
+        <div class="stepper">
+          <div class="step-item done">
+            <div class="step-circle">✓</div>
+            <div class="step-label">選擇日期</div>
+          </div>
+          <div class="step-line done"></div>
+          <div class="step-item done">
+            <div class="step-circle">✓</div>
+            <div class="step-label">填寫資料</div>
+          </div>
+          <div class="step-line done"></div>
+          <div class="step-item active">
+            <div class="step-circle">3</div>
+            <div class="step-label">預訂完成</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-inner">
+        <div class="check-icon">✓</div>
+        <h1 class="success-title">預訂成功！出發準備好了嗎？</h1>
+        <p class="success-sub">確認信已寄送至您的信箱，請記得在出發前查閱。</p>
+
+        <div class="order-card">
+          <div class="order-card-header">
+            <h4>訂單詳情</h4>
+            <span class="order-id">ITNQHTNFIA</span>
+          </div>
+          <div class="order-row">
+            <span class="label">體驗名稱</span>
+            <span class="value">清水斷崖獨木舟探險</span>
+          </div>
+          <div class="order-row">
+            <span class="label">目的地</span>
+            <span class="value">花蓮</span>
+          </div>
+          <div class="order-row">
+            <span class="label">體驗日期</span>
+            <span class="value" id="sc-date">—</span>
+          </div>
+          <div class="order-row">
+            <span class="label">場次</span>
+            <span class="value" id="sc-sess">—</span>
+          </div>
+          <div class="order-row">
+            <span class="label">聯絡人</span>
+            <span class="value" id="sc-name">旅客</span>
+          </div>
+          <div class="order-row">
+            <span class="label">已付總金額</span>
+            <span class="value price">NT$ 1,800</span>
+          </div>
+        </div>
+
+        <div class="success-actions">
+          <button class="btn-outline-dark" onclick="alert('返回首頁（待接入 index.html）')">← 返回首頁</button>
+          <button class="btn-orange" onclick="alert('查看我的訂單（待接入訂單頁）')">查看我的訂單</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div></div>
+<footer id="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">島嶼旅跡</div>
+      <p>深入台灣每一個小鎮，<br>感受在地的真實故事。<br>跟著在地嚮導，<br>與那片土地上真實相遇。</p>
+    </div>
+    <div class="footer-col">
+      <h4>探索</h4>
+      <ul>
+        <li><a href="#" data-go="products">所有體驗</a></li>
+        <li><a href="#" data-go="products" data-theme="戶外">戶外登頂</a></li>
+        <li><a href="#" data-go="products" data-theme="手作">手作工藝</a></li>
+        <li><a href="#" data-go="products" data-theme="美食">美食料理</a></li>
+        <li><a href="#" data-go="products" data-theme="文化">文化歷史</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>公司</h4>
+      <ul>
+        <li><a href="#" data-go="about">關於我們</a></li>
+        <li><a href="#" data-go="faq">常見問答</a></li>
+        <li><a href="#" data-go="index">加盟嚮導申請</a></li>
+        <li><a href="#" data-go="index">媒體合作</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>支援</h4>
+      <ul>
+        <li><a href="#" data-go="index">退換政策</a></li>
+        <li><a href="#" data-go="index">隱私政策</a></li>
+        <li><a href="#" data-go="index">服務條款</a></li>
+        <li><a href="#" data-go="profile">查看訂單</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 島嶼旅跡 IslandTrace. All rights reserved.</p>
+    <a href="#" data-go="index">用心定義台灣，一寸土地。</a>
+  </div>
+</footer>
+<script>
+const App = {
+  page: 'index',
+  init() {
+    document.body.addEventListener('click', e => {
+      const el = e.target.closest('[data-go]');
+      if (!el) return;
+      e.preventDefault();
+      this.go(el.dataset.go, el.dataset.theme || null);
+    });
+    document.querySelector('.nav-logo')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') this.go('index');
+    });
+    document.querySelectorAll('#view-products .card[data-theme]').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.closest('.card-fav')) return;
+        this.go('detail');
+      });
+    });
+    document.getElementById('btn-book-now')?.addEventListener('click', () => this.go('booking'));
+    document.getElementById('btn-success-home')?.addEventListener('click', () => this.go('index'));
+    document.getElementById('btn-success-orders')?.addEventListener('click', () => this.go('profile'));
+    if (typeof initCalendar === 'function') initCalendar();
+    if (typeof initAboutReveal === 'function') initAboutReveal();
+    if (typeof initFaq === 'function') initFaq();
+    if (typeof updateQtyDisplay === 'function') updateQtyDisplay();
+  },
+  go(page, theme) {
+    this.page = page;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + page)?.classList.add('active');
+    const login = page === 'login';
+    document.getElementById('site-nav').hidden = login;
+    document.getElementById('site-footer').hidden = login;
+    document.querySelectorAll('.nav-links a:not(.nav-cta)').forEach(a => {
+      a.classList.toggle('active', a.dataset.go === page);
+    });
+    window.scrollTo(0, 0);
+    if (page === 'products' && theme && typeof applyThemeFilter === 'function') applyThemeFilter(theme);
+    if (page === 'booking' && typeof showBookingStep === 'function') showBookingStep('page-step1');
+    if (page === 'about' && typeof initAboutReveal === 'function') initAboutReveal();
+  }
+};
+document.addEventListener('DOMContentLoaded', () => App.init());
+
+// ── 功能一：切換標籤選中狀態 ──
+        // 當使用者點擊標籤按鈕，加上或移除 active class
+        function toggleTag(btn) {
+            btn.classList.toggle('active');
+            filterCards(); // 每次點擊都重新篩選
+        }
+
+        // ── 功能二：清除所有篩選 ──
+        function clearFilters() {
+            // 找出所有帶 active class 的按鈕，逐一移除
+            document.querySelectorAll('.tag-btn.active').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // 清空價格輸入
+            document.getElementById('price-min').value = '';
+            document.getElementById('price-max').value = '';
+            filterCards();
+        }
+
+        // ── 功能三：收藏切換 ──
+        function toggleFav(btn) {
+            // 如果目前是「已收藏」就取消，否則加入收藏
+            if (btn.classList.contains('liked')) {
+                btn.classList.remove('liked');
+                btn.textContent = '♡'; // 空心愛心
+            } else {
+                btn.classList.add('liked');
+                btn.textContent = '♥'; // 實心愛心
+                btn.style.color = 'var(--orange)';
+            }
+        }
+
+        // ── 功能四：篩選卡片 ──
+        function filterCards() {
+            // 收集目前選中的地區
+            const activeRegions = [...document.querySelectorAll('#region-tags .tag-btn.active')]
+                .map(btn => btn.textContent.trim());
+
+            // 收集目前選中的時間
+            const activeTimes = [...document.querySelectorAll('#time-tags .tag-btn.active')]
+                .map(btn => btn.textContent.trim());
+
+            // 收集目前選中的主題（去掉 emoji）
+            const activeThemes = [...document.querySelectorAll('#theme-tags .tag-btn.active')]
+                .map(btn => btn.dataset.theme); // 移除前兩個字元（emoji + 空格）
+
+            // 讀取價格範圍
+            const minPrice = parseInt(document.getElementById('price-min').value) || 0;
+            const maxPrice = parseInt(document.getElementById('price-max').value) || Infinity;
+
+            // 取得所有卡片
+            const cards = document.querySelectorAll('.card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const region = card.dataset.region;   // 從 data-region 取地區
+                const theme = card.dataset.theme;    // 從 data-theme 取主題
+                const time = card.dataset.time;     // 從 data-time 取時間
+                const price = parseInt(card.dataset.price); // 從 data-price 取價格
+
+                // 判斷是否符合地區篩選（沒有選則全部顯示）
+                const regionOk = activeRegions.length === 0 || activeRegions.includes(region);
+                const timeOk = activeTimes.length === 0 || activeTimes.includes(time);
+                const themeOk = activeThemes.length === 0 || activeThemes.some(t => theme.includes(t));
+                const priceOk = price >= minPrice && price <= maxPrice;
+
+                if (regionOk && timeOk && themeOk && priceOk) {
+                    card.style.display = '';    // 顯示
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none'; // 隱藏
+                }
+            });
+
+            // 更新結果數量
+            document.getElementById('count').textContent = visibleCount;
+        }
+
+        // ── 監聽價格輸入，即時篩選 ──
+        document.getElementById('price-min').addEventListener('input', filterCards);
+        document.getElementById('price-max').addEventListener('input', filterCards);
+function applyThemeFilter(theme){document.querySelectorAll('#theme-tags .tag-btn').forEach(b=>b.classList.toggle('active',b.dataset.theme===theme));filterCards();}
+// ── 第一步：把「會變動的資料」存成變數，方便集中管理 ──
+        const unitPrice = 1800;   // 每人的單價（之後若要做成多商品共用，可以改成從資料庫/陣列讀取）
+        const maxQty = 8;         // 對應「行程亮點」裡寫的：小班制最多 8 人
+        const minQty = 1;         // 至少要訂 1 人
+        let currentQty = 1;       // 目前選擇的人數，預設 1 人
+
+        // ── 第二步：寫一個「更新畫面」的函式 ──
+        // 邏輯：只要人數改變，就要重新計算總金額，並更新畫面上的文字
+        function updateQtyDisplay() {
+            // 把目前人數寫到畫面上
+            document.getElementById('qty-num').textContent = currentQty;
+
+            // 計算總金額 = 單價 × 人數
+            const total = unitPrice * currentQty;
+
+            // toLocaleString() 可以自動幫數字加上千分位逗號，例如 1800 -> "1,800"
+            document.getElementById('total-amount').textContent = 'NT$ ' + total.toLocaleString();
+
+            // 當人數已達最小值/最大值時，把對應的按鈕「鎖住」，避免使用者繼續按
+            document.getElementById('btn-minus').disabled = (currentQty <= minQty);
+            document.getElementById('btn-plus').disabled = (currentQty >= maxQty);
+        }
+
+        // ── 第三步：寫「加」、「減」按鈕各自要做的事 ──
+        function increaseQty() {
+            if (currentQty < maxQty) {
+                currentQty++;       // 等同於 currentQty = currentQty + 1
+                updateQtyDisplay();    // 每次數字改變後，都要呼叫一次更新畫面
+            }
+        }
+
+        function decreaseQty() {
+            if (currentQty > minQty) {
+                currentQty--;       // 等同於 currentQty = currentQty - 1
+                updateQtyDisplay();
+            }
+        }
+
+        // ── 第四步：圖片畫廊 - 點縮圖換主圖 ──
+        // thumbEl：被點到的縮圖本身（透過 this 傳進來）
+        // newSrc：要換上去的大圖網址
+        function changeImage(thumbEl, newSrc) {
+            // 換主圖的 src
+            document.getElementById('main-image').src = newSrc;
+
+            // 把所有縮圖的 active 樣式拿掉，再加到「目前被點的這個」上面
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            thumbEl.classList.add('active');
+        }
+
+        // ── 第五步：按下「立刻預訂」要做的事 ──
+        // 這裡先用 alert 模擬送出訂單，之後可以換成串接後端 API 的程式碼
+        // ── 第六步：頁面載入時，先執行一次，確保畫面跟變數是同步的 ──
+        updateQtyDisplay();
+/* ---- State ---- */
+    const state = {
+      selectedDate: null,   // Date object
+      selectedSession: null, // 'am' | 'pm'
+      payMethod: 'cc',
+      contactName: '',
+    };
+
+    /* ============ CALENDAR ============ */
+    let calYear, calMonth;
+
+    function initCalendar() {
+      const now = new Date();
+      calYear = now.getFullYear();
+      calMonth = now.getMonth();
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const months = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+      document.getElementById('cal-title').textContent = `${calYear} 年 ${months[calMonth]}`;
+
+      const grid = document.getElementById('cal-grid');
+      // remove old day cells (keep DOW headers = first 7 children)
+      while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+      const today = new Date(); today.setHours(0,0,0,0);
+      const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+      // empty cells
+      for (let i = 0; i < firstDay; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const el = document.createElement('div');
+        const date = new Date(calYear, calMonth, d);
+        date.setHours(0,0,0,0);
+        el.className = 'cal-day';
+        el.textContent = d;
+
+        if (date <= today) {
+          el.classList.add('disabled');
+        } else {
+          if (state.selectedDate && date.getTime() === state.selectedDate.getTime()) {
+            el.classList.add('selected');
+          }
+          if (date.getTime() === today.getTime()) el.classList.add('today');
+          el.addEventListener('click', () => selectDate(date));
+        }
+        grid.appendChild(el);
+      }
+    }
+
+    document.getElementById('cal-prev').addEventListener('click', () => {
+      calMonth--;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      renderCalendar();
+    });
+
+    document.getElementById('cal-next').addEventListener('click', () => {
+      calMonth++;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderCalendar();
+    });
+
+    function selectDate(date) {
+      state.selectedDate = date;
+      renderCalendar();
+      const d = date;
+      const str = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
+      document.getElementById('s1-date-disp').textContent = str;
+      document.getElementById('s1-date-disp').style.color = 'var(--text-main)';
+      checkStep1();
+    }
+
+    /* ---- Session ---- */
+    function selectSession(s) {
+      state.selectedSession = s;
+      document.getElementById('sess-am').classList.toggle('selected', s === 'am');
+      document.getElementById('sess-pm').classList.toggle('selected', s === 'pm');
+      const label = s === 'am' ? '09:00 上午場' : '14:00 下午場';
+      document.getElementById('s1-sess-disp').textContent = label;
+      document.getElementById('s1-sess-disp').style.color = 'var(--text-main)';
+      checkStep1();
+    }
+
+    function checkStep1() {
+      const ok = state.selectedDate && state.selectedSession;
+      document.getElementById('step1-next').disabled = !ok;
+    }
+
+    /* ---- Go to Step 2 ---- */
+    function goToStep2() {
+      // propagate values to step2 summary
+      const d = state.selectedDate;
+      const dateStr = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
+      const sessStr = state.selectedSession === 'am' ? '09:00 上午場' : '14:00 下午場';
+      document.getElementById('s2-date-disp').textContent = dateStr;
+      document.getElementById('s2-sess-disp').textContent = sessStr;
+
+      showBookingStep('page-step2');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ============ PAYMENT ============ */
+    function selectPay(method) {
+      state.payMethod = method;
+      ['cc','line','apple'].forEach(m => {
+        document.getElementById('pay-' + m).classList.toggle('selected', m === method);
+      });
+      const ccFields = document.getElementById('cc-fields');
+      ccFields.classList.toggle('show', method === 'cc');
+    }
+
+    /* Card number formatting */
+    document.getElementById('inp-ccnum').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').slice(0,16);
+      this.value = v.replace(/(.{4})/g,'$1 ').trim();
+    });
+
+    /* Expiry formatting */
+    document.getElementById('inp-ccexp').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').slice(0,4);
+      if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+      this.value = v;
+    });
+
+    /* ---- Validate & Confirm ---- */
+    function validateAndConfirm() {
+      let valid = true;
+
+      function check(fgId, inputId, testFn) {
+        const fg = document.getElementById(fgId);
+        const val = document.getElementById(inputId).value.trim();
+        if (!testFn(val)) {
+          fg.classList.add('has-error');
+          document.getElementById(inputId).classList.add('error');
+          valid = false;
+        } else {
+          fg.classList.remove('has-error');
+          document.getElementById(inputId).classList.remove('error');
+        }
+        return val;
+      }
+
+      const name = check('fg-name', 'inp-name', v => v.length >= 2);
+      check('fg-phone', 'inp-phone', v => /^09\d{2}[\s-]?\d{3}[\s-]?\d{3}$/.test(v.replace(/\s/g,'')));
+      check('fg-email', 'inp-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+
+      if (state.payMethod === 'cc') {
+        check('fg-ccnum', 'inp-ccnum', v => v.replace(/\s/g,'').length === 16);
+        check('fg-ccexp', 'inp-ccexp', v => /^\d{2}\/\d{2}$/.test(v));
+        check('fg-cccvv', 'inp-cccvv', v => /^\d{3,4}$/.test(v));
+      }
+
+      if (!valid) return;
+
+      // populate success page
+      state.contactName = name;
+      const d = state.selectedDate;
+      const dateStr = `${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')}`;
+      const sessStr = state.selectedSession === 'am' ? '09:00 上午場' : '14:00 下午場';
+      document.getElementById('sc-date').textContent = dateStr;
+      document.getElementById('sc-sess').textContent = sessStr;
+      document.getElementById('sc-name').textContent = name;
+
+      showBookingStep('page-success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      spawnConfetti();
+    }
+
+    /* ============ PAGE NAV ============ */
+    function showBookingStep(id) {
+      document.querySelectorAll('.booking-page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    /* ============ CONFETTI ============ */
+    function spawnConfetti() {
+      const wrap = document.getElementById('confetti');
+      wrap.innerHTML = '';
+      const colors = ['#E8633A','#F5A623','#3BAA6E','#4A90D9','#9B59B6','#E74C3C','#2ECC71','#F39C12'];
+      for (let i = 0; i < 80; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 100 + '%';
+        el.style.top = '-10px';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.width = (Math.random() * 8 + 5) + 'px';
+        el.style.height = (Math.random() * 8 + 5) + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
+        el.style.animationDelay = (Math.random() * 2) + 's';
+        wrap.appendChild(el);
+      }
+    }
+function initFaq(){document.querySelectorAll('#view-faq .tab-btn').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('#view-faq .tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('#view-faq .faq-section').forEach(s=>s.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.target).classList.add('active');};});}
+// ===================== TABS =====================
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const faqSections = document.querySelectorAll('.faq-section');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        faqSections.forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target).classList.add('active');
+      });
+    });
+
+    // ===================== ACCORDION =====================
+    function toggleAccordion(header) {
+      const body = header.nextElementSibling;
+      const icon = header.querySelector('.accordion-icon');
+      const isOpen = header.classList.contains('open');
+
+      // Close all in same section
+      const section = header.closest('.faq-section');
+      section.querySelectorAll('.accordion-header.open').forEach(h => {
+        if (h !== header) {
+          h.classList.remove('open');
+          h.nextElementSibling.classList.remove('open');
+          h.querySelector('.accordion-icon').textContent = '+';
+        }
+      });
+
+      if (isOpen) {
+        header.classList.remove('open');
+        body.classList.remove('open');
+        icon.textContent = '+';
+      } else {
+        header.classList.add('open');
+        body.classList.add('open');
+        icon.textContent = '✕';
+      }
+    }
+function switchProfileTab(tab) {
+      // Hide all panels
+      document.getElementById('panel-orders').style.display = 'none';
+      document.getElementById('panel-favorites').style.display = 'none';
+      document.getElementById('panel-profile').style.display = 'none';
+
+      // Remove active from all menu items
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+
+      // Show target panel
+      document.getElementById('panel-' + tab).style.display = '';
+
+      // Set active menu item
+      const items = document.querySelectorAll('.menu-item:not(.logout)');
+      const tabMap = { orders: 0, favorites: 1, profile: 2 };
+      if (tabMap[tab] !== undefined) {
+        items[tabMap[tab]].classList.add('active');
+      }
+    }
+
+    function cancelOrder(btn) {
+      const row = btn.closest('.order-row');
+      const name = row.querySelector('.order-exp-name').textContent;
+      if (confirm(`確定要取消「${name}」的訂單嗎？`)) {
+        const badge = row.querySelector('.status-badge');
+        badge.textContent = '已取消';
+        badge.className = 'status-badge';
+        badge.style.cssText = 'background:#f5f5f5; color:#999; border:1px solid #e0e0e0;';
+        btn.remove();
+      }
+    }
+
+    function saveProfile() {
+      const btn = event.currentTarget;
+      btn.textContent = '✓ 已儲存';
+      btn.style.background = '#3DAA6E';
+      setTimeout(() => {
+        btn.textContent = '儲存變更';
+        btn.style.background = 'var(--orange)';
+      }, 2000);
+    }
+
+    function handleLogout() {
+      if (confirm('確定要登出嗎？')) {
+        alert('已成功登出！');
+      }
+    }
+function switchLoginTab(tab) {
+    const loginTab   = document.getElementById('tab-login');
+    const registerTab = document.getElementById('tab-register');
+    const loginPanel  = document.getElementById('panel-login');
+    const registerPanel = document.getElementById('panel-register');
+    if (tab === 'login') {
+      loginTab.classList.add('active'); loginTab.setAttribute('aria-selected', 'true');
+      registerTab.classList.remove('active'); registerTab.setAttribute('aria-selected', 'false');
+      loginPanel.style.display = ''; registerPanel.style.display = 'none';
+    } else {
+      registerTab.classList.add('active'); registerTab.setAttribute('aria-selected', 'true');
+      loginTab.classList.remove('active'); loginTab.setAttribute('aria-selected', 'false');
+      registerPanel.style.display = ''; loginPanel.style.display = 'none';
+    }
+  }
+
+  function togglePw() {
+    const pw = document.getElementById('password');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+  }
+
+  // ── 使用 DOM 事件監聽，確保 100% 觸發 ──
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // 1. 監聽登入按鈕
+    const loginBtn = document.getElementById('btn-login-submit');
+    if(loginBtn) {
+      loginBtn.addEventListener('click', function() {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        // 檢查是否為空
+        if (!email || !password) {
+          alert('請填寫電子信箱與密碼');
+          return;
+        }
+
+        // 核心關鍵：檢查信箱字元有沒有包含 @
+        if (!email.includes('@')) {
+          alert('錯誤：電子信箱格式不正確，請輸入包含 @ 的信箱帳號');
+          return;
+        }
+
+        alert('登入成功！歡迎回來 👋');
+      });
+    }
+
+    // 2. 監聽註冊按鈕
+    const regBtn = document.getElementById('btn-reg-submit');
+    if(regBtn) {
+      regBtn.addEventListener('click', function() {
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+
+        if (!name || !email || !password) {
+          alert('請填寫所有欄位資料');
+          return;
+        }
+
+        // 註冊信箱同步檢查有沒有 @
+        if (!email.includes('@')) {
+          alert('錯誤：註冊電子信箱格式不正確，請輸入包含 @ 的信箱帳號');
+          return;
+        }
+
+        alert('註冊成功！準備開啟旅程 ✈️');
+      });
+    }
+  });
+function initAboutReveal(){document.querySelectorAll('#view-about .reveal').forEach(el=>{const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target);}});},{threshold:.12});o.observe(el);});}
+</script>
+</body>
+</html>
